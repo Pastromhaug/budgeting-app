@@ -30,7 +30,10 @@ export const loadDataFile = async (dataFile: DataFile): Promise<WiseTransaction[
   
   // Return cached data if available
   if (dataCache.has(cacheKey)) {
-    return dataCache.get(cacheKey)!;
+    const cachedData = dataCache.get(cacheKey);
+    if (cachedData) {
+      return cachedData;
+    }
   }
 
   try {
@@ -86,5 +89,5 @@ export const getMonthName = (month: number): string => {
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December'
   ];
-  return months[month - 1] || 'Unknown';
+  return months[month - 1] ?? 'Unknown';
 };

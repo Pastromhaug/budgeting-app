@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 import { HotTable } from '@handsontable/react';
 import { registerAllModules } from 'handsontable/registry';
 import 'handsontable/dist/handsontable.full.min.css';
@@ -12,7 +12,7 @@ interface TransactionTableProps {
   type: 'raw' | 'cleaned';
 }
 
-const TransactionTable: React.FC<TransactionTableProps> = ({ data, type }) => {
+const TransactionTable: FC<TransactionTableProps> = ({ data, type }) => {
   if (data.length === 0) {
     return (
       <div className="text-center py-8 text-gray-500">

@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 import { HotTable } from '@handsontable/react';
 import { registerAllModules } from 'handsontable/registry';
 import 'handsontable/dist/handsontable.full.min.css';
@@ -12,7 +12,7 @@ interface SummaryTableProps {
   type: 'category' | 'target';
 }
 
-const SummaryTable: React.FC<SummaryTableProps> = ({ data, type }) => {
+const SummaryTable: FC<SummaryTableProps> = ({ data, type }) => {
   if (data.length === 0) {
     return (
       <div className="text-center py-8 text-gray-500">

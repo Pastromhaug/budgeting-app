@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import type { JSX } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './components/ui/card';
 import TransactionTable from './components/TransactionTable';
@@ -15,7 +16,7 @@ import {
 } from './utils/csvUtils';
 import { loadWiseData, availableDataFiles } from './utils/dataLoader';
 
-function App() {
+function App(): JSX.Element {
   const [rawTransactions, setRawTransactions] = useState<WiseTransaction[]>([]);
   const [cleanedTransactions, setCleanedTransactions] = useState<CleanTransaction[]>([]);
   const [categorySummaries, setCategorySummaries] = useState<CategorySummary[]>([]);
@@ -44,7 +45,7 @@ function App() {
     loadData();
   }, [loadData]);
 
-  const processTransactions = (transactions: WiseTransaction[]) => {
+  const processTransactions = (transactions: WiseTransaction[]): void => {
     setRawTransactions(transactions);
     
     const cleaned = cleanTransactions(transactions);

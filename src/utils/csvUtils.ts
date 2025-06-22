@@ -25,7 +25,7 @@ export const parseCSV = (csvText: string): Promise<WiseTransaction[]> => {
           resolve(results.data as WiseTransaction[]);
         }
       },
-      error: (error: any) => {
+      error: (error: unknown) => {
         reject(error);
       }
     });
@@ -65,7 +65,7 @@ export const generateCategorySummaries = (transactions: CleanTransaction[]): Cat
   const spendingTransactions = transactions.filter(t => t.direction === Direction.OUT);
   
   spendingTransactions.forEach(transaction => {
-    const existing = categoryMap.get(transaction.category) || { total: 0, count: 0 };
+    const existing = categoryMap.get(transaction.category) ?? { total: 0, count: 0 };
     categoryMap.set(transaction.category, {
       total: existing.total + transaction.sourceAmount,
       count: existing.count + 1
@@ -88,7 +88,7 @@ export const generateTargetSummaries = (transactions: CleanTransaction[]): Targe
   const spendingTransactions = transactions.filter(t => t.direction === Direction.OUT);
   
   spendingTransactions.forEach(transaction => {
-    const existing = targetMap.get(transaction.targetName) || { total: 0, count: 0 };
+    const existing = targetMap.get(transaction.targetName) ?? { total: 0, count: 0 };
     targetMap.set(transaction.targetName, {
       total: existing.total + transaction.sourceAmount,
       count: existing.count + 1

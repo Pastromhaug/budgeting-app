@@ -26,13 +26,31 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src --ext .ts,.tsx --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint src --ext .ts,.tsx --fix",
+    "format": "prettier --write src/**/*.{ts,tsx}",
+    "format:check": "prettier --check src/**/*.{ts,tsx}"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+      "project": "./tsconfig.json"
+    },
+    "plugins": ["@typescript-eslint"],
+    "rules": {
+      "@typescript-eslint/no-unused-vars": "error",
+      "@typescript-eslint/explicit-function-return-type": "warn",
+      "@typescript-eslint/no-explicit-any": "error",
+      "@typescript-eslint/prefer-nullish-coalescing": "error",
+      "@typescript-eslint/prefer-optional-chain": "error",
+      "@typescript-eslint/no-non-null-assertion": "error"
+    }
   },
   "browserslist": {
     "production": [
@@ -48,8 +66,13 @@
   },
   "devDependencies": {
     "@types/papaparse": "^5.3.16",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
     "autoprefixer": "^10.4.21",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.5.0",
     "postcss": "^8.5.6",
+    "prettier": "^3.5.3",
     "tailwindcss": "^3.4.17"
   }
 }

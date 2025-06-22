@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, type ReactNode, type FC, type JSX } from 'react';
 
 interface TabsContextType {
   value: string;
@@ -11,21 +11,21 @@ interface TabsProps {
   defaultValue?: string;
   value?: string;
   onValueChange?: (value: string) => void;
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
 }
 
-export const Tabs: React.FC<TabsProps> = ({
+export const Tabs: FC<TabsProps> = ({
   defaultValue,
   value: controlledValue,
   onValueChange,
   children,
   className = ''
-}) => {
-  const [internalValue, setInternalValue] = useState(defaultValue || '');
+}): JSX.Element => {
+  const [internalValue, setInternalValue] = useState(defaultValue ?? '');
   
   const value = controlledValue !== undefined ? controlledValue : internalValue;
-  const handleValueChange = (newValue: string) => {
+  const handleValueChange = (newValue: string): void => {
     if (controlledValue === undefined) {
       setInternalValue(newValue);
     }
@@ -42,11 +42,11 @@ export const Tabs: React.FC<TabsProps> = ({
 };
 
 interface TabsListProps {
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
 }
 
-export const TabsList: React.FC<TabsListProps> = ({ children, className = '' }) => (
+export const TabsList: FC<TabsListProps> = ({ children, className = '' }) => (
   <div className={`inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground bg-gray-100 ${className}`}>
     {children}
   </div>
@@ -54,11 +54,11 @@ export const TabsList: React.FC<TabsListProps> = ({ children, className = '' }) 
 
 interface TabsTriggerProps {
   value: string;
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
 }
 
-export const TabsTrigger: React.FC<TabsTriggerProps> = ({ value, children, className = '' }) => {
+export const TabsTrigger: FC<TabsTriggerProps> = ({ value, children, className = '' }): JSX.Element => {
   const context = useContext(TabsContext);
   if (!context) throw new Error('TabsTrigger must be used within Tabs');
   
@@ -71,7 +71,7 @@ export const TabsTrigger: React.FC<TabsTriggerProps> = ({ value, children, class
           ? 'bg-background text-foreground shadow-sm bg-white text-gray-900' 
           : 'hover:bg-muted hover:text-foreground hover:bg-gray-200'
       } ${className}`}
-      onClick={() => context.onValueChange(value)}
+      onClick={(): void => context.onValueChange(value)}
     >
       {children}
     </button>
@@ -80,11 +80,11 @@ export const TabsTrigger: React.FC<TabsTriggerProps> = ({ value, children, class
 
 interface TabsContentProps {
   value: string;
-  children: React.ReactNode;
+  children: ReactNode;
   className?: string;
 }
 
-export const TabsContent: React.FC<TabsContentProps> = ({ value, children, className = '' }) => {
+export const TabsContent: FC<TabsContentProps> = ({ value, children, className = '' }): JSX.Element | null => {
   const context = useContext(TabsContext);
   if (!context) throw new Error('TabsContent must be used within Tabs');
   

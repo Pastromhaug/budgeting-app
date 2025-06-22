@@ -1,11 +1,11 @@
-import React from 'react';
+import type { ButtonHTMLAttributes, FC } from 'react';
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'default' | 'outline' | 'destructive';
   size?: 'default' | 'sm' | 'lg';
 }
 
-export const Button: React.FC<ButtonProps> = ({
+export const Button: FC<ButtonProps> = ({
   className = '',
   variant = 'default',
   size = 'default',
