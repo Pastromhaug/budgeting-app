@@ -1,30 +1,24 @@
 import Papa from 'papaparse';
-import { WiseTransaction, WiseCleanTransaction, WiseCategory } from '../../types/wise';
+import { WiseTransactionSchema, WiseCleanTransaction } from '../../types/wise';
 import { CategorySummary, TargetSummary, Direction } from '../../types/common';
 
 // Parse CSV data for Wise
-export const parseWiseCSV = (csvText: string): Promise<WiseTransaction[]> => {
+export const parseWiseCSV = (csvText: string): Promise<any[]> => {
   return new Promise((resolve, reject) => {
     Papa.parse(csvText, {
       header: true,
       skipEmptyLines: true,
-      transform: (value, header) => {
-        // Convert numeric strings to numbers for specific fields
-        if (header === 'Source amount (after fees)' || 
-            header === 'Target amount (after fees)' || 
-            header === 'Exchange rate' ||
-            header === 'Source fee amount') {
-          const num = parseFloat(value);
-          return isNaN(num) ? value : num;
-        }
-        return value;
-      },
       complete: (results) => {
-        if (results.errors.length > 0) {
-          reject(results.errors);
-        } else {
-          resolve(results.data as WiseTransaction[]);
+        const transactions: any[] = [];
+        for (const row of results.data as any[]) {
+          const result = WiseTransactionSchema.safeParse(row);
+          if (result.success) {
+            transactions.push(result.data);
+          } else {
+            console.error('Wise CSV validation error:', result.error.issues, 'Row:', row);
+          }
         }
+        resolve(transactions);
       },
       error: (error: unknown) => {
         reject(error);
@@ -34,33 +28,33 @@ export const parseWiseCSV = (csvText: string): Promise<WiseTransaction[]> => {
 };
 
 // Clean transactions to only important columns
-export const cleanWiseTransactions = (transactions: WiseTransaction[]): WiseCleanTransaction[] => {
+export const cleanWiseTransactions = (transactions: any[]): WiseCleanTransaction[] => {
   return transactions.map(transaction => ({
     targetName: transaction['Target name'],
-    sourceAmount: transaction['Source amount (after fees)'],
-    category: transaction.Category,
-    direction: transaction.Direction,
-    createdOn: transaction['Created on']
+    sourceAmount: typeof transaction['Source amount (after fees)'] === 'string'
+      ? parseFloat(transaction['Source amount (after fees)'])
+      : transaction['Source amount (after fees)'],
+    category: transaction['Category'],
+    direction: transaction['Direction'],
+    createdOn: transaction['Created on'],
   }));
 };
 
-// Calculate total money spent (OUT transactions)
+// ... rest of the file unchanged ...
 export const calculateWiseTotalSpent = (transactions: WiseCleanTransaction[]): number => {
   return transactions
     .filter(t => t.direction === Direction.OUT)
     .reduce((sum, t) => sum + t.sourceAmount, 0);
 };
 
-// Calculate total money received (IN transactions)
 export const calculateWiseTotalReceived = (transactions: WiseCleanTransaction[]): number => {
   return transactions
     .filter(t => t.direction === Direction.IN)
     .reduce((sum, t) => sum + t.sourceAmount, 0);
 };
 
-// Generate category summaries
 export const generateWiseCategorySummaries = (transactions: WiseCleanTransaction[]): CategorySummary[] => {
-  const categoryMap = new Map<WiseCategory, { total: number; count: number }>();
+  const categoryMap = new Map<string, { total: number; count: number }>();
   const spendingTransactions = transactions.filter(t => t.direction === Direction.OUT);
   spendingTransactions.forEach(transaction => {
     const existing = categoryMap.get(transaction.category) ?? { total: 0, count: 0 };
@@ -77,7 +71,6 @@ export const generateWiseCategorySummaries = (transactions: WiseCleanTransaction
   }));
 };
 
-// Generate target summaries
 export const generateWiseTargetSummaries = (transactions: WiseCleanTransaction[]): TargetSummary[] => {
   const targetMap = new Map<string, { total: number; count: number }>();
   const spendingTransactions = transactions.filter(t => t.direction === Direction.OUT);
@@ -96,12 +89,10 @@ export const generateWiseTargetSummaries = (transactions: WiseCleanTransaction[]
   }));
 };
 
-// Sort summaries by total amount (descending)
 export const sortWiseByAmount = <T extends { totalAmount: number }>(summaries: T[]): T[] => {
   return [...summaries].sort((a, b) => b.totalAmount - a.totalAmount);
 };
 
-// Sort summaries by count (descending)
 export const sortWiseByCount = <T extends { count: number }>(summaries: T[]): T[] => {
   return [...summaries].sort((a, b) => b.count - a.count);
 };

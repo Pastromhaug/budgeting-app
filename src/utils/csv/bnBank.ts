@@ -1,20 +1,33 @@
 import Papa from 'papaparse';
-import { BnTransaction, BnCleanTransaction } from '../../types/bnBank';
+import { BnTransactionSchema, BnCleanTransaction } from '../../types/bnBank';
 import { Direction, CategorySummary, TargetSummary } from '../../types/common';
 
-// Parse CSV data for BN Bank
-export const parseBnBankCSV = (csvText: string): Promise<BnTransaction[]> => {
+export interface BnBankParseResult {
+  transactions: ReturnType<typeof BnTransactionSchema.parse>[];
+  errors: string[];
+}
+
+// Parse CSV data for BN Bank with zod validation
+export const parseBnBankCSV = (csvText: string): Promise<BnBankParseResult> => {
   return new Promise((resolve, reject) => {
     Papa.parse(csvText, {
       header: true,
       skipEmptyLines: true,
       delimiter: ';',
       complete: (results) => {
-        if (results.errors.length > 0) {
-          reject(results.errors);
-        } else {
-          resolve(results.data as BnTransaction[]);
+        const transactions: ReturnType<typeof BnTransactionSchema.parse>[] = [];
+        const errors: string[] = [];
+        for (const row of results.data as any[]) {
+          const result = BnTransactionSchema.safeParse(row);
+          if (result.success) {
+            transactions.push(result.data);
+          } else {
+            errors.push(JSON.stringify(result.error.issues));
+            // Log detailed error for debugging
+            console.error('BN Bank CSV validation error:', result.error.issues, 'Row:', row);
+          }
         }
+        resolve({ transactions, errors });
       },
       error: (error: unknown) => {
         reject(error);
@@ -24,12 +37,11 @@ export const parseBnBankCSV = (csvText: string): Promise<BnTransaction[]> => {
 };
 
 // Clean transactions to only important columns
-export const cleanBnBankTransactions = (transactions: BnTransaction[]): BnCleanTransaction[] => {
+export const cleanBnBankTransactions = (transactions: any[]): BnCleanTransaction[] => {
   return transactions.map(transaction => {
-    // Use the actual keys from the CSV (with encoding issues)
-    const date = transaction['Utf�rt dato'];
-    const inn = (transaction['Bel�p inn'] || '').replace(/\s/g, '').replace(',', '.');
-    const ut = (transaction['Bel�p ut'] || '').replace(/\s/g, '').replace(',', '.');
+    const date = transaction['Utfrt dato'];
+    const inn = (transaction['Belp inn'] || '').replace(/\s/g, '').replace(',', '.');
+    const ut = (transaction['Belp ut'] || '').replace(/\s/g, '').replace(',', '.');
     let direction: Direction;
     let amount: number;
     if (inn && !isNaN(Number(inn))) {

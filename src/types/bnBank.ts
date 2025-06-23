@@ -1,23 +1,26 @@
+import { z } from 'zod';
 import { Direction } from './common';
 
-// Raw CSV structure for BN Bank (use actual keys from the CSV, including encoding issues)
-export interface BnTransaction {
-  'Utf�rt dato': string; // Date
-  'Bokf�rt dato': string;
-  'Rentedato': string;
-  'Beskrivelse': string; // Target Name
-  'Type': string;
-  'Undertype': string; // Category
-  'Fra konto': string;
-  'Avsender': string;
-  'Til konto': string;
-  'Mottakernavn': string;
-  'Bel�p inn': string; // Amount in (may be empty)
-  'Bel�p ut': string; // Amount out (may be empty)
-  'Valuta': string; // Should always be NOK
-  'Status': string;
-  'Melding/KID/Fakt.nr': string;
-}
+// Zod schema for BN Bank transaction (use actual keys from the CSV, including encoding issues)
+export const BnTransactionSchema = z.object({
+  'Utfrt dato': z.string(),
+  'Bokfrt dato': z.string(),
+  'Rentedato': z.string(),
+  'Beskrivelse': z.string(),
+  'Type': z.string(),
+  'Undertype': z.string(),
+  'Fra konto': z.string(),
+  'Avsender': z.string(),
+  'Til konto': z.string(),
+  'Mottakernavn': z.string(),
+  'Belp inn': z.string().optional(),
+  'Belp ut': z.string().optional(),
+  'Valuta': z.string(),
+  'Status': z.string(),
+  'Melding/KID/Fakt.nr': z.string(),
+});
+
+export type BnTransaction = z.infer<typeof BnTransactionSchema>;
 
 // Cleaned up transaction with only important columns
 export interface BnCleanTransaction {

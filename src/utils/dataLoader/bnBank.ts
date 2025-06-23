@@ -1,4 +1,4 @@
-import { parseBnBankCSV } from '../csv/bnBank';
+import { parseBnBankCSV, BnBankParseResult } from '../csv/bnBank';
 import { BnTransaction } from '../../types/bnBank';
 
 export interface BnDataFile {
@@ -31,12 +31,17 @@ export const availableBnDataFiles: BnDataFile[] = [
 
 const bnDataCache = new Map<string, BnTransaction[]>();
 
-export const loadBnBankDataFile = async (dataFile: BnDataFile): Promise<BnTransaction[]> => {
+export interface BnBankDataResult {
+  transactions: BnTransaction[];
+  errors: string[];
+}
+
+export const loadBnBankDataFile = async (dataFile: BnDataFile): Promise<BnBankDataResult> => {
   const cacheKey = dataFile.path;
   if (bnDataCache.has(cacheKey)) {
     const cachedData = bnDataCache.get(cacheKey);
     if (cachedData) {
-      return cachedData;
+      return { transactions: cachedData, errors: [] };
     }
   }
   try {
@@ -45,9 +50,9 @@ export const loadBnBankDataFile = async (dataFile: BnDataFile): Promise<BnTransa
       throw new Error(`Failed to fetch CSV file: ${response.status} ${response.statusText}`);
     }
     const csvText = await response.text();
-    const transactions = await parseBnBankCSV(csvText);
+    const { transactions, errors }: BnBankParseResult = await parseBnBankCSV(csvText);
     bnDataCache.set(cacheKey, transactions);
-    return transactions;
+    return { transactions, errors };
   } catch (error) {
     console.error(`Error loading CSV data from ${dataFile.path}:`, error);
     throw new Error(`Could not load CSV data from ${dataFile.displayName}. Make sure the file exists in public/${dataFile.path}`);
