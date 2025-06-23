@@ -1,9 +1,9 @@
 import { Direction } from './common';
 
-// Raw CSV structure for BN Bank
+// Raw CSV structure for BN Bank (use actual keys from the CSV, including encoding issues)
 export interface BnTransaction {
-  'Utført dato': string; // Date
-  'Bokført dato': string;
+  'Utf�rt dato': string; // Date
+  'Bokf�rt dato': string;
   'Rentedato': string;
   'Beskrivelse': string; // Target Name
   'Type': string;
@@ -12,8 +12,8 @@ export interface BnTransaction {
   'Avsender': string;
   'Til konto': string;
   'Mottakernavn': string;
-  'Beløp inn': string; // Amount in (may be empty)
-  'Beløp ut': string; // Amount out (may be empty)
+  'Bel�p inn': string; // Amount in (may be empty)
+  'Bel�p ut': string; // Amount out (may be empty)
   'Valuta': string; // Should always be NOK
   'Status': string;
   'Melding/KID/Fakt.nr': string;

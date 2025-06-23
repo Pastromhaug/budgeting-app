@@ -1,6 +1,6 @@
 import Papa from 'papaparse';
 import { BnTransaction, BnCleanTransaction } from '../../types/bnBank';
-import { Direction } from '../../types/common';
+import { Direction, CategorySummary, TargetSummary } from '../../types/common';
 
 // Parse CSV data for BN Bank
 export const parseBnBankCSV = (csvText: string): Promise<BnTransaction[]> => {
@@ -8,6 +8,7 @@ export const parseBnBankCSV = (csvText: string): Promise<BnTransaction[]> => {
     Papa.parse(csvText, {
       header: true,
       skipEmptyLines: true,
+      delimiter: ';',
       complete: (results) => {
         if (results.errors.length > 0) {
           reject(results.errors);
@@ -25,15 +26,18 @@ export const parseBnBankCSV = (csvText: string): Promise<BnTransaction[]> => {
 // Clean transactions to only important columns
 export const cleanBnBankTransactions = (transactions: BnTransaction[]): BnCleanTransaction[] => {
   return transactions.map(transaction => {
-    // Determine direction and amount
+    // Use the actual keys from the CSV (with encoding issues)
+    const date = transaction['Utf�rt dato'];
+    const inn = (transaction['Bel�p inn'] || '').replace(/\s/g, '').replace(',', '.');
+    const ut = (transaction['Bel�p ut'] || '').replace(/\s/g, '').replace(',', '.');
     let direction: Direction;
     let amount: number;
-    if (transaction['Beløp inn'] && transaction['Beløp inn'].trim() !== '') {
+    if (inn && !isNaN(Number(inn))) {
       direction = Direction.IN;
-      amount = parseFloat(transaction['Beløp inn'].replace(',', '.'));
-    } else if (transaction['Beløp ut'] && transaction['Beløp ut'].trim() !== '') {
+      amount = parseFloat(inn);
+    } else if (ut && !isNaN(Number(ut))) {
       direction = Direction.OUT;
-      amount = parseFloat(transaction['Beløp ut'].replace(',', '.'));
+      amount = parseFloat(ut);
     } else {
       direction = Direction.OUT;
       amount = 0;
@@ -43,7 +47,64 @@ export const cleanBnBankTransactions = (transactions: BnTransaction[]): BnCleanT
       amount,
       category: transaction['Undertype'],
       direction,
-      date: transaction['Utført dato'],
+      date,
     };
   });
+};
+
+// ... rest of the file unchanged ...
+export const calculateBnBankTotalSpent = (transactions: BnCleanTransaction[]): number => {
+  return transactions
+    .filter(t => t.direction === Direction.OUT)
+    .reduce((sum, t) => sum + t.amount, 0);
+};
+
+export const calculateBnBankTotalReceived = (transactions: BnCleanTransaction[]): number => {
+  return transactions
+    .filter(t => t.direction === Direction.IN)
+    .reduce((sum, t) => sum + t.amount, 0);
+};
+
+export const generateBnBankCategorySummaries = (transactions: BnCleanTransaction[]): CategorySummary[] => {
+  const categoryMap = new Map<string, { total: number; count: number }>();
+  const spendingTransactions = transactions.filter(t => t.direction === Direction.OUT);
+  spendingTransactions.forEach(transaction => {
+    const existing = categoryMap.get(transaction.category) ?? { total: 0, count: 0 };
+    categoryMap.set(transaction.category, {
+      total: existing.total + transaction.amount,
+      count: existing.count + 1
+    });
+  });
+  return Array.from(categoryMap.entries()).map(([category, data]) => ({
+    category,
+    totalAmount: data.total,
+    count: data.count,
+    averageAmount: data.total / data.count
+  }));
+};
+
+export const generateBnBankTargetSummaries = (transactions: BnCleanTransaction[]): TargetSummary[] => {
+  const targetMap = new Map<string, { total: number; count: number }>();
+  const spendingTransactions = transactions.filter(t => t.direction === Direction.OUT);
+  spendingTransactions.forEach(transaction => {
+    const existing = targetMap.get(transaction.targetName) ?? { total: 0, count: 0 };
+    targetMap.set(transaction.targetName, {
+      total: existing.total + transaction.amount,
+      count: existing.count + 1
+    });
+  });
+  return Array.from(targetMap.entries()).map(([targetName, data]) => ({
+    targetName,
+    totalAmount: data.total,
+    count: data.count,
+    averageAmount: data.total / data.count
+  }));
+};
+
+export const sortBnBankByAmount = <T extends { totalAmount: number }>(summaries: T[]): T[] => {
+  return [...summaries].sort((a, b) => b.totalAmount - a.totalAmount);
+};
+
+export const sortBnBankByCount = <T extends { count: number }>(summaries: T[]): T[] => {
+  return [...summaries].sort((a, b) => b.count - a.count);
 };
