@@ -14,17 +14,16 @@ import SummaryTable from './components/SummaryTable';
 import { WiseTransaction, WiseCleanTransaction } from './types/wise';
 import { CategorySummary, TargetSummary } from './types/common';
 import {
-  cleanTransactions,
-  calculateTotalSpent,
-  calculateTotalReceived,
-  generateCategorySummaries,
-  generateTargetSummaries,
-  sortByAmount,
-  sortByCount,
+  cleanWiseTransactions,
+  calculateWiseTotalSpent,
+  calculateWiseTotalReceived,
+  generateWiseCategorySummaries,
+  generateWiseTargetSummaries,
+  sortWiseByAmount,
 } from './utils/csvUtils';
 import {
-  loadDataFile,
-  availableDataFiles,
+  loadWiseDataFile,
+  availableWiseDataFiles,
   type DataFile,
 } from './utils/dataLoader';
 
@@ -51,7 +50,7 @@ function App(): JSX.Element {
       const fileToLoad =
         dataFile ??
         selectedDataFile ??
-        availableDataFiles[availableDataFiles.length - 1]; // Default to latest month
+        availableWiseDataFiles[availableWiseDataFiles.length - 1]; // Default to latest month
 
       if (!fileToLoad) {
         setError('No data files available');
@@ -61,7 +60,7 @@ function App(): JSX.Element {
       setLoading(true);
       setError(null);
       try {
-        const transactions = await loadDataFile(fileToLoad);
+        const transactions = await loadWiseDataFile(fileToLoad);
         processTransactions(transactions);
         if (!selectedDataFile) {
           setSelectedDataFile(fileToLoad);
@@ -87,8 +86,8 @@ function App(): JSX.Element {
     event: React.ChangeEvent<HTMLSelectElement>
   ): void => {
     const selectedPath = event.target.value;
-    const dataFile = availableDataFiles.find(
-      file => file.path === selectedPath
+    const dataFile = availableWiseDataFiles.find(
+      (file: DataFile) => file.path === selectedPath
     );
     if (dataFile) {
       setSelectedDataFile(dataFile);
@@ -99,14 +98,14 @@ function App(): JSX.Element {
   const processTransactions = (transactions: WiseTransaction[]): void => {
     setRawTransactions(transactions);
 
-    const cleaned = cleanTransactions(transactions);
+    const cleaned = cleanWiseTransactions(transactions);
     setCleanedTransactions(cleaned);
 
-    setTotalSpent(calculateTotalSpent(cleaned));
-    setTotalReceived(calculateTotalReceived(cleaned));
+    setTotalSpent(calculateWiseTotalSpent(cleaned));
+    setTotalReceived(calculateWiseTotalReceived(cleaned));
 
-    setCategorySummaries(generateCategorySummaries(cleaned));
-    setTargetSummaries(generateTargetSummaries(cleaned));
+    setCategorySummaries(generateWiseCategorySummaries(cleaned));
+    setTargetSummaries(generateWiseTargetSummaries(cleaned));
   };
 
   return (
@@ -157,7 +156,7 @@ function App(): JSX.Element {
                   className="w-48"
                   disabled={loading}
                 >
-                  {availableDataFiles.map(file => (
+                  {availableWiseDataFiles.map((file: DataFile) => (
                     <option key={file.path} value={file.path}>
                       {file.displayName}
                     </option>
@@ -289,7 +288,7 @@ function App(): JSX.Element {
                 </CardHeader>
                 <CardContent>
                   <SummaryTable
-                    data={sortByAmount(categorySummaries)}
+                    data={sortWiseByAmount(categorySummaries)}
                     type="category"
                   />
                 </CardContent>
@@ -305,10 +304,7 @@ function App(): JSX.Element {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <SummaryTable
-                    data={sortByCount(categorySummaries)}
-                    type="category"
-                  />
+                  <SummaryTable data={categorySummaries} type="category" />
                 </CardContent>
               </Card>
             </TabsContent>
@@ -322,10 +318,7 @@ function App(): JSX.Element {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <SummaryTable
-                    data={sortByAmount(targetSummaries)}
-                    type="target"
-                  />
+                  <SummaryTable data={targetSummaries} type="target" />
                 </CardContent>
               </Card>
             </TabsContent>
@@ -339,10 +332,7 @@ function App(): JSX.Element {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <SummaryTable
-                    data={sortByCount(targetSummaries)}
-                    type="target"
-                  />
+                  <SummaryTable data={targetSummaries} type="target" />
                 </CardContent>
               </Card>
             </TabsContent>
