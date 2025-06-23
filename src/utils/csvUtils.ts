@@ -1,5 +1,10 @@
 import Papa from 'papaparse';
-import { WiseTransaction, CleanTransaction, CategorySummary, TargetSummary, Direction, Category } from '../types/transactions';
+import {
+  WiseTransaction,
+  WiseCleanTransaction,
+  WiseCategory,
+} from '../types/wise';
+import { CategorySummary, TargetSummary, Direction } from '../types/common';
 
 // Parse CSV data
 export const parseCSV = (csvText: string): Promise<WiseTransaction[]> => {
@@ -9,16 +14,18 @@ export const parseCSV = (csvText: string): Promise<WiseTransaction[]> => {
       skipEmptyLines: true,
       transform: (value, header) => {
         // Convert numeric strings to numbers for specific fields
-        if (header === 'Source amount (after fees)' || 
-            header === 'Target amount (after fees)' || 
-            header === 'Exchange rate' ||
-            header === 'Source fee amount') {
+        if (
+          header === 'Source amount (after fees)' ||
+          header === 'Target amount (after fees)' ||
+          header === 'Exchange rate' ||
+          header === 'Source fee amount'
+        ) {
           const num = parseFloat(value);
           return isNaN(num) ? value : num;
         }
         return value;
       },
-      complete: (results) => {
+      complete: results => {
         if (results.errors.length > 0) {
           reject(results.errors);
         } else {
@@ -27,88 +34,112 @@ export const parseCSV = (csvText: string): Promise<WiseTransaction[]> => {
       },
       error: (error: unknown) => {
         reject(error);
-      }
+      },
     });
   });
 };
 
 // Clean transactions to only important columns
-export const cleanTransactions = (transactions: WiseTransaction[]): CleanTransaction[] => {
+export const cleanTransactions = (
+  transactions: WiseTransaction[]
+): WiseCleanTransaction[] => {
   return transactions.map(transaction => ({
     targetName: transaction['Target name'],
     sourceAmount: transaction['Source amount (after fees)'],
     category: transaction.Category,
     direction: transaction.Direction,
-    createdOn: transaction['Created on']
+    createdOn: transaction['Created on'],
   }));
 };
 
 // Calculate total money spent (OUT transactions)
-export const calculateTotalSpent = (transactions: CleanTransaction[]): number => {
+export const calculateTotalSpent = (
+  transactions: WiseCleanTransaction[]
+): number => {
   return transactions
     .filter(t => t.direction === Direction.OUT)
     .reduce((sum, t) => sum + t.sourceAmount, 0);
 };
 
 // Calculate total money received (IN transactions)
-export const calculateTotalReceived = (transactions: CleanTransaction[]): number => {
+export const calculateTotalReceived = (
+  transactions: WiseCleanTransaction[]
+): number => {
   return transactions
     .filter(t => t.direction === Direction.IN)
     .reduce((sum, t) => sum + t.sourceAmount, 0);
 };
 
 // Generate category summaries
-export const generateCategorySummaries = (transactions: CleanTransaction[]): CategorySummary[] => {
-  const categoryMap = new Map<Category, { total: number; count: number }>();
-  
+export const generateCategorySummaries = (
+  transactions: WiseCleanTransaction[]
+): CategorySummary[] => {
+  const categoryMap = new Map<WiseCategory, { total: number; count: number }>();
+
   // Only include OUT transactions for spending analysis
-  const spendingTransactions = transactions.filter(t => t.direction === Direction.OUT);
-  
+  const spendingTransactions = transactions.filter(
+    t => t.direction === Direction.OUT
+  );
+
   spendingTransactions.forEach(transaction => {
-    const existing = categoryMap.get(transaction.category) ?? { total: 0, count: 0 };
+    const existing = categoryMap.get(transaction.category) ?? {
+      total: 0,
+      count: 0,
+    };
     categoryMap.set(transaction.category, {
       total: existing.total + transaction.sourceAmount,
-      count: existing.count + 1
+      count: existing.count + 1,
     });
   });
-  
+
   return Array.from(categoryMap.entries()).map(([category, data]) => ({
     category,
     totalAmount: data.total,
     count: data.count,
-    averageAmount: data.total / data.count
+    averageAmount: data.total / data.count,
   }));
 };
 
 // Generate target summaries
-export const generateTargetSummaries = (transactions: CleanTransaction[]): TargetSummary[] => {
+export const generateTargetSummaries = (
+  transactions: WiseCleanTransaction[]
+): TargetSummary[] => {
   const targetMap = new Map<string, { total: number; count: number }>();
-  
+
   // Only include OUT transactions for spending analysis
-  const spendingTransactions = transactions.filter(t => t.direction === Direction.OUT);
-  
+  const spendingTransactions = transactions.filter(
+    t => t.direction === Direction.OUT
+  );
+
   spendingTransactions.forEach(transaction => {
-    const existing = targetMap.get(transaction.targetName) ?? { total: 0, count: 0 };
+    const existing = targetMap.get(transaction.targetName) ?? {
+      total: 0,
+      count: 0,
+    };
     targetMap.set(transaction.targetName, {
       total: existing.total + transaction.sourceAmount,
-      count: existing.count + 1
+      count: existing.count + 1,
     });
   });
-  
+
   return Array.from(targetMap.entries()).map(([targetName, data]) => ({
     targetName,
     totalAmount: data.total,
     count: data.count,
-    averageAmount: data.total / data.count
+    averageAmount: data.total / data.count,
   }));
 };
 
 // Sort summaries by total amount (descending)
-export const sortByAmount = <T extends { totalAmount: number }>(summaries: T[]): T[] => {
+export const sortByAmount = <T extends { totalAmount: number }>(
+  summaries: T[]
+): T[] => {
   return [...summaries].sort((a, b) => b.totalAmount - a.totalAmount);
 };
 
 // Sort summaries by count (descending)
-export const sortByCount = <T extends { count: number }>(summaries: T[]): T[] => {
+export const sortByCount = <T extends { count: number }>(
+  summaries: T[]
+): T[] => {
   return [...summaries].sort((a, b) => b.count - a.count);
 };

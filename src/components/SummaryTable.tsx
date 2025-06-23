@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import { HotTable } from '@handsontable/react';
 import { registerAllModules } from 'handsontable/registry';
 import 'handsontable/dist/handsontable.full.min.css';
-import { CategorySummary, TargetSummary } from '../types/transactions';
+import { CategorySummary, TargetSummary } from '../types/common';
 
 // Register Handsontable modules
 registerAllModules();
@@ -23,16 +23,36 @@ const SummaryTable: FC<SummaryTableProps> = ({ data, type }) => {
 
   const categoryColumns = [
     { data: 'category', title: 'Category' },
-    { data: 'totalAmount', title: 'Total $', type: 'numeric', numericFormat: { pattern: '$0,0.00' } },
+    {
+      data: 'totalAmount',
+      title: 'Total $',
+      type: 'numeric',
+      numericFormat: { pattern: '$0,0.00' },
+    },
     { data: 'count', title: 'Count', type: 'numeric' },
-    { data: 'averageAmount', title: 'Average $', type: 'numeric', numericFormat: { pattern: '$0,0.00' } }
+    {
+      data: 'averageAmount',
+      title: 'Average $',
+      type: 'numeric',
+      numericFormat: { pattern: '$0,0.00' },
+    },
   ];
 
   const targetColumns = [
     { data: 'targetName', title: 'Target Name' },
-    { data: 'totalAmount', title: 'Total $', type: 'numeric', numericFormat: { pattern: '$0,0.00' } },
+    {
+      data: 'totalAmount',
+      title: 'Total $',
+      type: 'numeric',
+      numericFormat: { pattern: '$0,0.00' },
+    },
     { data: 'count', title: 'Count', type: 'numeric' },
-    { data: 'averageAmount', title: 'Average $', type: 'numeric', numericFormat: { pattern: '$0,0.00' } }
+    {
+      data: 'averageAmount',
+      title: 'Average $',
+      type: 'numeric',
+      numericFormat: { pattern: '$0,0.00' },
+    },
   ];
 
   const columns = type === 'category' ? categoryColumns : targetColumns;

@@ -1,5 +1,5 @@
 import { parseCSV } from './csvUtils';
-import { WiseTransaction } from '../types/transactions';
+import { WiseTransaction } from '../types/wise';
 
 // Available data files structure
 export interface DataFile {
@@ -17,15 +17,15 @@ export const availableDataFiles: DataFile[] = [
     month: 5,
     bank: 'wise',
     path: 'data/2025/5/wise.csv',
-    displayName: 'Wise - May 2025'
+    displayName: 'Wise - May 2025',
   },
   {
     year: 2025,
     month: 4,
     bank: 'wise',
     path: 'data/2025/4/wise.csv',
-    displayName: 'Wise - April 2025'
-  }
+    displayName: 'Wise - April 2025',
+  },
 ].sort((a, b) => {
   // Sort by year desc, then month desc (newest first)
   if (a.year !== b.year) return b.year - a.year;
@@ -36,9 +36,11 @@ export const availableDataFiles: DataFile[] = [
 const dataCache = new Map<string, WiseTransaction[]>();
 
 // Load CSV data from a specific data file
-export const loadDataFile = async (dataFile: DataFile): Promise<WiseTransaction[]> => {
+export const loadDataFile = async (
+  dataFile: DataFile
+): Promise<WiseTransaction[]> => {
   const cacheKey = dataFile.path;
-  
+
   // Return cached data if available
   if (dataCache.has(cacheKey)) {
     const cachedData = dataCache.get(cacheKey);
@@ -50,18 +52,22 @@ export const loadDataFile = async (dataFile: DataFile): Promise<WiseTransaction[
   try {
     const response = await fetch(`/${dataFile.path}`);
     if (!response.ok) {
-      throw new Error(`Failed to fetch CSV file: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Failed to fetch CSV file: ${response.status} ${response.statusText}`
+      );
     }
     const csvText = await response.text();
     const transactions = await parseCSV(csvText);
-    
+
     // Cache the parsed data
     dataCache.set(cacheKey, transactions);
-    
+
     return transactions;
   } catch (error) {
     console.error(`Error loading CSV data from ${dataFile.path}:`, error);
-    throw new Error(`Could not load CSV data from ${dataFile.displayName}. Make sure the file exists in public/${dataFile.path}`);
+    throw new Error(
+      `Could not load CSV data from ${dataFile.displayName}. Make sure the file exists in public/${dataFile.path}`
+    );
   }
 };
 
@@ -69,19 +75,19 @@ export const loadDataFile = async (dataFile: DataFile): Promise<WiseTransaction[
 export const loadAllData = async (): Promise<WiseTransaction[]> => {
   try {
     const allTransactions: WiseTransaction[] = [];
-    
+
     for (const dataFile of availableDataFiles) {
       const transactions = await loadDataFile(dataFile);
       allTransactions.push(...transactions);
     }
-    
+
     // Sort by date (newest first)
     allTransactions.sort((a, b) => {
       const dateA = new Date(a['Created on']);
       const dateB = new Date(b['Created on']);
       return dateB.getTime() - dateA.getTime();
     });
-    
+
     return allTransactions;
   } catch (error) {
     console.error('Error loading all data:', error);
@@ -97,8 +103,18 @@ export const loadWiseData = async (): Promise<WiseTransaction[]> => {
 // Get month name from number
 export const getMonthName = (month: number): string => {
   const months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
   ];
   return months[month - 1] ?? 'Unknown';
 };

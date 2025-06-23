@@ -11,12 +11,8 @@ import {
 import { Select } from './components/ui/select';
 import TransactionTable from './components/TransactionTable';
 import SummaryTable from './components/SummaryTable';
-import {
-  WiseTransaction,
-  CleanTransaction,
-  CategorySummary,
-  TargetSummary,
-} from './types/transactions';
+import { WiseTransaction, WiseCleanTransaction } from './types/wise';
+import { CategorySummary, TargetSummary } from './types/common';
 import {
   cleanTransactions,
   calculateTotalSpent,
@@ -35,7 +31,7 @@ import {
 function App(): JSX.Element {
   const [rawTransactions, setRawTransactions] = useState<WiseTransaction[]>([]);
   const [cleanedTransactions, setCleanedTransactions] = useState<
-    CleanTransaction[]
+    WiseCleanTransaction[]
   >([]);
   const [categorySummaries, setCategorySummaries] = useState<CategorySummary[]>(
     []

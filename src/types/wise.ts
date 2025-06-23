@@ -1,14 +1,11 @@
-// Generate enums based on the CSV data
-export enum Direction {
-  IN = 'IN',
-  OUT = 'OUT'
+// Wise-specific types and enums
+import { Direction } from './common';
+
+export enum WiseStatus {
+  COMPLETED = 'COMPLETED',
 }
 
-export enum Status {
-  COMPLETED = 'COMPLETED'
-}
-
-export enum Category {
+export enum WiseCategory {
   EATING_OUT = 'Eating out',
   GROCERIES = 'Groceries',
   TRANSPORT = 'Transport',
@@ -18,10 +15,10 @@ export enum Category {
   BILLS = 'Bills',
   GENERAL = 'General',
   ENTERTAINMENT = 'Entertainment',
-  REWARDS = 'Rewards'
+  REWARDS = 'Rewards',
 }
 
-export enum TargetName {
+export enum WiseTargetName {
   LOS_TACOS_ALEXANDER_KIELL = 'Los Tacos Alexander Kiell',
   INNOM_BIRKELUNDEN = 'Innom Birkelunden',
   VOI = 'Voi',
@@ -80,13 +77,13 @@ export enum TargetName {
   OTTO_CO_AS = 'Otto Co As',
   MEDIUM_SUBSCRIPTION = 'Medium Subscription',
   ST_PAULI_BIER = 'St Pauli Bier',
-  TULLINS_CAFE = 'Tullins Cafe'
+  TULLINS_CAFE = 'Tullins Cafe',
 }
 
 // Raw CSV structure (all columns from the CSV)
 export interface WiseTransaction {
   ID: string;
-  Status: Status;
+  Status: WiseStatus;
   Direction: Direction;
   'Created on': string;
   'Finished on': string;
@@ -104,31 +101,15 @@ export interface WiseTransaction {
   Reference: string;
   Batch: string;
   'Created by': string;
-  Category: Category;
+  Category: WiseCategory;
   Note: string;
 }
 
 // Cleaned up transaction with only important columns
-export interface CleanTransaction {
+export interface WiseCleanTransaction {
   targetName: string;
   sourceAmount: number;
-  category: Category;
+  category: WiseCategory;
   direction: Direction;
   createdOn: string;
-}
-
-// Category summary for analysis
-export interface CategorySummary {
-  category: Category;
-  totalAmount: number;
-  count: number;
-  averageAmount: number;
-}
-
-// Target summary for analysis
-export interface TargetSummary {
-  targetName: string;
-  totalAmount: number;
-  count: number;
-  averageAmount: number;
 }
