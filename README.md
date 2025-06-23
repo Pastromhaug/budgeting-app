@@ -4,14 +4,15 @@ A React-based web application for viewing and analyzing CSV transaction data fro
 
 ## Features
 
+- **Month Selection**: Select and view data for specific months using a dropdown selector
 - **Automatic Data Loading**: Automatically loads CSV files from the data directory
 - **Raw CSV View**: View all columns from the original CSV using Handsontable
 - **Cleaned View**: View only important columns (Target name, Amount, Category, Direction, Date)
 - **Financial Summary**: See total spent, total received, and net balance
 - **Category Analysis**: View spending by category, sorted by amount or transaction count
-- **Target Analysis**: View spending by vendor/target, sorted by amount or transaction cou  nt
-- **Multi-File Support**: Supports multiple CSV files and combines data automatically
-- **Lazy Loading**: CSV data is parsed and cached on demand
+- **Target Analysis**: View spending by vendor/target, sorted by amount or transaction count
+- **Multi-File Support**: Supports multiple CSV files with individual month analysis
+- **Lazy Loading**: CSV data is parsed and cached on demand for performance
 
 ## Technology Stack
 

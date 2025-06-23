@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import type { JSX } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './components/ui/card';
+import { Select } from './components/ui/select';
 import TransactionTable from './components/TransactionTable';
 import SummaryTable from './components/SummaryTable';
 import { WiseTransaction, CleanTransaction, CategorySummary, TargetSummary } from './types/transactions';
@@ -14,7 +15,7 @@ import {
   sortByAmount,
   sortByCount
 } from './utils/csvUtils';
-import { loadWiseData, availableDataFiles } from './utils/dataLoader';
+import { loadDataFile, availableDataFiles, type DataFile } from './utils/dataLoader';
 
 function App(): JSX.Element {
   const [rawTransactions, setRawTransactions] = useState<WiseTransaction[]>([]);
@@ -25,25 +26,45 @@ function App(): JSX.Element {
   const [totalReceived, setTotalReceived] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedDataFile, setSelectedDataFile] = useState<DataFile | null>(null);
 
-  const loadData = useCallback(async () => {
+  const loadData = useCallback(async (dataFile?: DataFile) => {
+    const fileToLoad = dataFile ?? selectedDataFile ?? availableDataFiles[availableDataFiles.length - 1]; // Default to latest month
+    
+    if (!fileToLoad) {
+      setError('No data files available');
+      return;
+    }
+    
     setLoading(true);
     setError(null);
     try {
-      const transactions = await loadWiseData();
+      const transactions = await loadDataFile(fileToLoad);
       processTransactions(transactions);
+      if (!selectedDataFile) {
+        setSelectedDataFile(fileToLoad);
+      }
     } catch (error) {
       console.error('Error loading data:', error);
-      setError('Failed to load transaction data. Please check that the CSV file exists in the data folder.');
+      setError(`Failed to load transaction data for ${fileToLoad.displayName}. Please check that the CSV file exists.`);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [selectedDataFile]);
 
   // Load data automatically on component mount
   useEffect(() => {
     loadData();
   }, [loadData]);
+
+  const handleMonthChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
+    const selectedPath = event.target.value;
+    const dataFile = availableDataFiles.find(file => file.path === selectedPath);
+    if (dataFile) {
+      setSelectedDataFile(dataFile);
+      loadData(dataFile);
+    }
+  };
 
   const processTransactions = (transactions: WiseTransaction[]): void => {
     setRawTransactions(transactions);
@@ -64,11 +85,33 @@ function App(): JSX.Element {
         <header className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">Budgeting App</h1>
           
-          {/* Data source info */}
+          {/* Month selector */}
           <div className="mb-6">
-            <div className="text-sm text-gray-600">
-              Data source: {availableDataFiles.map(file => file.displayName).join(', ')}
+            <div className="flex items-center gap-4 mb-4">
+              <label htmlFor="month-select" className="text-sm font-medium text-gray-700">
+                Select Month:
+              </label>
+              <Select
+                id="month-select"
+                value={selectedDataFile?.path ?? ''}
+                onChange={handleMonthChange}
+                className="w-48"
+                disabled={loading}
+              >
+                {availableDataFiles.map(file => (
+                  <option key={file.path} value={file.path}>
+                    {file.displayName}
+                  </option>
+                ))}
+              </Select>
             </div>
+            
+            {selectedDataFile && (
+              <div className="text-sm text-gray-600">
+                Viewing data: {selectedDataFile.displayName}
+              </div>
+            )}
+            
             {loading && (
               <div className="text-sm text-blue-600 mt-1">
                 Loading transaction data...

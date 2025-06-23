@@ -18,8 +18,19 @@ export const availableDataFiles: DataFile[] = [
     bank: 'wise',
     path: 'data/2025/5/wise.csv',
     displayName: 'Wise - May 2025'
+  },
+  {
+    year: 2025,
+    month: 4,
+    bank: 'wise',
+    path: 'data/2025/4/wise.csv',
+    displayName: 'Wise - April 2025'
   }
-];
+].sort((a, b) => {
+  // Sort by year desc, then month desc (newest first)
+  if (a.year !== b.year) return b.year - a.year;
+  return b.month - a.month;
+});
 
 // Cache for loaded data to avoid re-fetching
 const dataCache = new Map<string, WiseTransaction[]>();
