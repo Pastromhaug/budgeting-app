@@ -21,16 +21,18 @@ import {
   generateWiseTargetSummaries,
   sortWiseByAmount,
 } from './utils/csvUtils';
-import {
-  loadWiseDataFile,
-  availableWiseDataFiles,
-  type DataFile,
-} from './utils/dataLoader';
+import { availableDataFiles, type DataFile } from './utils/dataLoader/common';
+import { loadWiseDataFile } from './utils/dataLoader/wise';
+import { loadBnBankDataFile } from './utils/dataLoader/bnBank';
+import { BnTransaction, BnCleanTransaction } from './types/bnBank';
+import { cleanBnBankTransactions } from './utils/csv/bnBank';
 
 function App(): JSX.Element {
-  const [rawTransactions, setRawTransactions] = useState<WiseTransaction[]>([]);
+  const [rawTransactions, setRawTransactions] = useState<
+    WiseTransaction[] | BnTransaction[]
+  >([]);
   const [cleanedTransactions, setCleanedTransactions] = useState<
-    WiseCleanTransaction[]
+    WiseCleanTransaction[] | BnCleanTransaction[]
   >([]);
   const [categorySummaries, setCategorySummaries] = useState<CategorySummary[]>(
     []
@@ -50,7 +52,7 @@ function App(): JSX.Element {
       const fileToLoad =
         dataFile ??
         selectedDataFile ??
-        availableWiseDataFiles[availableWiseDataFiles.length - 1]; // Default to latest month
+        availableDataFiles.filter(f => f.bank === selectedBank)[0];
 
       if (!fileToLoad) {
         setError('No data files available');
@@ -60,8 +62,18 @@ function App(): JSX.Element {
       setLoading(true);
       setError(null);
       try {
-        const transactions = await loadWiseDataFile(fileToLoad);
-        processTransactions(transactions);
+        let transactions;
+        if (selectedBank === 'wise') {
+          transactions = await loadWiseDataFile(
+            fileToLoad as import('./utils/dataLoader/wise').DataFile
+          );
+          processTransactions(transactions);
+        } else if (selectedBank === 'bn_bank') {
+          transactions = await loadBnBankDataFile(
+            fileToLoad as import('./utils/dataLoader/bnBank').BnDataFile
+          );
+          processBnBankTransactions(transactions);
+        }
         if (!selectedDataFile) {
           setSelectedDataFile(fileToLoad);
         }
@@ -74,7 +86,7 @@ function App(): JSX.Element {
         setLoading(false);
       }
     },
-    [selectedDataFile]
+    [selectedDataFile, selectedBank]
   );
 
   // Load data automatically on component mount
@@ -86,8 +98,9 @@ function App(): JSX.Element {
     event: React.ChangeEvent<HTMLSelectElement>
   ): void => {
     const selectedPath = event.target.value;
-    const dataFile = availableWiseDataFiles.find(
-      (file: DataFile) => file.path === selectedPath
+    const dataFile = availableDataFiles.find(
+      (file: DataFile) =>
+        file.path === selectedPath && file.bank === selectedBank
     );
     if (dataFile) {
       setSelectedDataFile(dataFile);
@@ -106,6 +119,13 @@ function App(): JSX.Element {
 
     setCategorySummaries(generateWiseCategorySummaries(cleaned));
     setTargetSummaries(generateWiseTargetSummaries(cleaned));
+  };
+
+  const processBnBankTransactions = (transactions: BnTransaction[]): void => {
+    setRawTransactions(transactions);
+    const cleaned = cleanBnBankTransactions(transactions);
+    setCleanedTransactions(cleaned);
+    // TODO: Add BN Bank statistics here
   };
 
   return (
@@ -156,11 +176,13 @@ function App(): JSX.Element {
                   className="w-48"
                   disabled={loading}
                 >
-                  {availableWiseDataFiles.map((file: DataFile) => (
-                    <option key={file.path} value={file.path}>
-                      {file.displayName}
-                    </option>
-                  ))}
+                  {availableDataFiles
+                    .filter(f => f.bank === selectedBank)
+                    .map((file: DataFile) => (
+                      <option key={file.path} value={file.path}>
+                        {file.displayName}
+                      </option>
+                    ))}
                 </Select>
               </div>
               {selectedDataFile && (
@@ -180,11 +202,42 @@ function App(): JSX.Element {
           )}
 
           {/* Placeholder for BN Bank */}
-          {selectedBank === 'bn_bank' && (
+          {selectedBank === 'bn_bank' && cleanedTransactions.length > 0 && (
             <div className="mb-6">
-              <div className="text-lg text-gray-600">
-                BN Bank support coming soon!
-              </div>
+              <Card>
+                <CardHeader>
+                  <CardTitle>BN Bank Transactions</CardTitle>
+                  <CardDescription>
+                    Minimal table for BN Bank (full stats coming soon)
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <table className="min-w-full text-xs">
+                    <thead>
+                      <tr>
+                        <th className="px-2 py-1">Date</th>
+                        <th className="px-2 py-1">Target</th>
+                        <th className="px-2 py-1">Category</th>
+                        <th className="px-2 py-1">Direction</th>
+                        <th className="px-2 py-1">Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {(cleanedTransactions as BnCleanTransaction[]).map(
+                        (t, i) => (
+                          <tr key={i}>
+                            <td className="px-2 py-1">{t.date}</td>
+                            <td className="px-2 py-1">{t.targetName}</td>
+                            <td className="px-2 py-1">{t.category}</td>
+                            <td className="px-2 py-1">{t.direction}</td>
+                            <td className="px-2 py-1">{t.amount}</td>
+                          </tr>
+                        )
+                      )}
+                    </tbody>
+                  </table>
+                </CardContent>
+              </Card>
             </div>
           )}
 
@@ -258,7 +311,10 @@ function App(): JSX.Element {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <TransactionTable data={rawTransactions} type="raw" />
+                  <TransactionTable
+                    data={rawTransactions as WiseTransaction[]}
+                    type="raw"
+                  />
                 </CardContent>
               </Card>
             </TabsContent>
@@ -273,7 +329,10 @@ function App(): JSX.Element {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <TransactionTable data={cleanedTransactions} type="cleaned" />
+                  <TransactionTable
+                    data={cleanedTransactions as WiseCleanTransaction[]}
+                    type="cleaned"
+                  />
                 </CardContent>
               </Card>
             </TabsContent>

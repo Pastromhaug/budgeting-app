@@ -1,3 +1,12 @@
-// Common data loader utilities for all banks (if needed)
-export {};
-// For now, this can be a placeholder for shared data loader logic.
+import { DataFile as WiseDataFile, availableWiseDataFiles } from './wise';
+import { BnDataFile, availableBnDataFiles } from './bnBank';
+
+export type DataFile = WiseDataFile | BnDataFile;
+
+export const availableDataFiles: DataFile[] = [
+  ...availableWiseDataFiles,
+  ...availableBnDataFiles,
+].sort((a, b) => {
+  if (a.year !== b.year) return b.year - a.year;
+  return b.month - a.month;
+});
