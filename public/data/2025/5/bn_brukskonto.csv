@@ -1,52 +1,44 @@
-Utført dato;Bokført dato;Rentedato;Beskrivelse;Type;Undertype;Fra konto;Avsender;Til konto;Mottakernavn;Beløp inn;Beløp ut;Valuta;Status;Melding/KID/Fakt.nr
-31.05.2025;31.05.2025;30.05.2025;Vipps*Helt ratt;Varekjøp;Varekjøp debetkort;9230 34 46720;Per André Strømhaug;;;;-229;NOK;Bokført;*3983 28.05 NOK 229.00 Vipps*Helt ratt Kurs: 1.0000
-31.05.2025;31.05.2025;30.05.2025;Vipps*Ryde Technology AS;Varekjøp;Varekjøp debetkort;9230 34 46720;Per André Strømhaug;;;;-54.3;NOK;Bokført;*3983 29.05 NOK 54.30 Vipps*Ryde Technology AS Kurs: 1.0000
-31.05.2025;31.05.2025;30.05.2025;Gowrishangar Konesalingam;immediate;Straksbetaling;9100 01 35939;;9230 34 46720;Per André Strømhaug;1500;;NOK;Bokført;Fra: Gowrishangar Konesalingam Betalt: 30.05.25
-31.05.2025;31.05.2025;30.05.2025;30.05 ILA RENS WALDEMAR TRA OSLO;Varekjøp;Varekjøp debetkort;9230 34 46720;Per André Strømhaug;;;;-750;NOK;Bokført;30.05 ILA RENS WALDEMAR TRA OSLO
-28.05.2025;28.05.2025;28.05.2025;Vipps*Ryde Technology AS;Varekjøp;Varekjøp debetkort;9230 34 46720;Per André Strømhaug;;;;-77.7;NOK;Bokført;*3983 27.05 NOK 77.70 Vipps*Ryde Technology AS Kurs: 1.0000
-28.05.2025;28.05.2025;28.05.2025;Vipps*Ruter;Varekjøp;Varekjøp debetkort;9230 34 46720;Per André Strømhaug;;;;-88;NOK;Bokført;*3983 27.05 NOK 88.00 Vipps*Ruter Kurs: 1.0000
-28.05.2025;28.05.2025;28.05.2025;Vipps*Ruter;Varekjøp;Varekjøp debetkort;9230 34 46720;Per André Strømhaug;;;;-44;NOK;Bokført;*3983 27.05 NOK 44.00 Vipps*Ruter Kurs: 1.0000
-26.05.2025;26.05.2025;26.05.2025;Birkelunden Mannskor (37052701415);Betaling innland;Betaling med KID innland;9230 34 46720;Brukskonto;3705 27 01415;Birkelunden Mannskor;;-900;NOK;Bokført;Til: Birkelunden Mannskor Betalt: 25.05.25
-26.05.2025;26.05.2025;25.05.2025;Ryan Omar Alkochari (12040400808);immediate;Straksbetaling;9230 34 46720;Per André Strømhaug;1204 04 00808;Ryan Omar Alkochari;;-1800;NOK;Bokført;Til: Ryan Omar Alkochari
-26.05.2025;26.05.2025;26.05.2025;Birkelunden Mannskor (37052701415);Betaling innland;Betaling med KID innland;9230 34 46720;Brukskonto;3705 27 01415;Birkelunden Mannskor;;-1300;NOK;Bokført;Til: Birkelunden Mannskor Betalt: 25.05.25
-26.05.2025;26.05.2025;26.05.2025;Vipps*Oslo Badstuforening;Varekjøp;Varekjøp debetkort;9230 34 46720;Per André Strømhaug;;;;-150;NOK;Bokført;*3983 25.05 NOK 150.00 Vipps*Oslo Badstuforening Kurs: 1.0000
-26.05.2025;26.05.2025;26.05.2025;Lynrask Vask (36062227219);Betaling innland;Betaling med melding innland;9230 34 46720;Brukskonto;3606 22 27219;Lynrask Vask;;-1156;NOK;Bokført;Til: 3606.22.27219 Betalt: 25.05.25
-22.05.2025;22.05.2025;22.05.2025;Vipps*Ryde Technology AS;Varekjøp;Varekjøp debetkort;9230 34 46720;Per André Strømhaug;;;;-46.8;NOK;Bokført;*3983 21.05 NOK 46.80 Vipps*Ryde Technology AS Kurs: 1.0000
-21.05.2025;21.05.2025;21.05.2025;WISE EUROPE SA;Betaling utland;Betaling internasjonal;9235 00 06297;WISE EUROPE SA;9230 34 46720;Per André Strømhaug;20330.21;;NOK;Bokført;PER ANDRE STRMHAUGOBO PER ANDRE STR     OMHAUG/ROC/1342019998
-21.05.2025;21.05.2025;21.05.2025;Andre Arne Boucher;immediate;Straksbetaling;1813 32 74967;;9230 34 46720;Per André Strømhaug;183;;NOK;Bokført;Gave Magnus
-20.05.2025;20.05.2025;19.05.2025;Overføring;Overføring;Kreditoverføring;;;9230 34 46720;Brukskonto;150;;NOK;Bokført;*3983 19.05 NOK 150.00 Vipps*Vipps*Ryan Omar Alk Kurs: 1.0000
-19.05.2025;19.05.2025;19.05.2025;Vipps*Ruter;Varekjøp;Varekjøp debetkort;9230 34 46720;Per André Strømhaug;;;;-88;NOK;Bokført;*3983 18.05 NOK 88.00 Vipps*Ruter Kurs: 1.0000
-19.05.2025;19.05.2025;19.05.2025;Vipps*Ryde Technology AS;Varekjøp;Varekjøp debetkort;9230 34 46720;Per André Strømhaug;;;;-25.9;NOK;Bokført;*3983 18.05 NOK 25.90 Vipps*Ryde Technology AS Kurs: 1.0000
-19.05.2025;19.05.2025;19.05.2025;Vipps*Ambulerande;Varekjøp;Varekjøp debetkort;9230 34 46720;Per André Strømhaug;;;;-400;NOK;Bokført;*3983 18.05 NOK 400.00 Vipps*Ambulerande Kurs: 1.0000
-19.05.2025;19.05.2025;19.05.2025;Custom Catering AS;Varekjøp;Varekjøp debetkort;9230 34 46720;Per André Strømhaug;;;;-298;NOK;Bokført;*3983 17.05 NOK 298.00 Custom Catering AS Kurs: 1.0000
-19.05.2025;19.05.2025;19.05.2025;Fjordkraft AS (15031934610);Betaling innland - Avtalegiro;Betaling med KID innland;9230 34 46720;Brukskonto;1503 19 34610;Fjordkraft AS;;-1085.78;NOK;Bokført;Fjordkraft AS
-15.05.2025;15.05.2025;15.05.2025;BORETTSLAGET ØVREFOSS 7 (98204025142);Betaling innland - eFaktura;Betaling med KID innland;9230 34 46720;Brukskonto;9820 40 25142;BORETTSLAGET ØVREFOSS 7;;-7688;NOK;Bokført;Til: BORETTSLAGET ØVREFOSS 7 Betalt: 15.05.25
-14.05.2025;14.05.2025;14.05.2025;Vipps*Avisa Oslo;Varekjøp;Varekjøp debetkort;9230 34 46720;Per André Strømhaug;;;;-299;NOK;Bokført;*3983 13.05 NOK 299.00 Vipps*Avisa Oslo Kurs: 1.0000
-13.05.2025;13.05.2025;13.05.2025;Vipps*Aftenposten;Varekjøp;Varekjøp debetkort;9230 34 46720;Per André Strømhaug;;;;-149.5;NOK;Bokført;*3983 12.05 NOK 149.50 Vipps*Aftenposten Kurs: 1.0000
-13.05.2025;13.05.2025;13.05.2025;Per Eivind G. Strømhaug;Betaling innland;Overføring fra annen konto;5130 11 18221;Per Eivind G. Strømhaug;9230 34 46720;Per André Strømhaug;3555;;NOK;Bokført;Husleie mars - desember
-13.05.2025;13.05.2025;13.05.2025;13.05 ILA RENS WALDEMAR TRA OSLO;Varekjøp;Varekjøp debetkort;9230 34 46720;Per André Strømhaug;;;;-550;NOK;Bokført;13.05 ILA RENS WALDEMAR TRA OSLO
-13.05.2025;13.05.2025;13.05.2025;CRUCIBLE HUB OSLO AS (15036655302);Betaling innland;Betaling med KID innland;9230 34 46720;Brukskonto;1503 66 55302;CRUCIBLE HUB OSLO AS;;-5386.25;NOK;Bokført;Til: CRUCIBLE HUB OSLO AS Betalt: 13.05.25
-13.05.2025;13.05.2025;13.05.2025;CRUCIBLE HUB OSLO AS (15036655302);Betaling innland;Betaling med KID innland;9230 34 46720;Brukskonto;1503 66 55302;CRUCIBLE HUB OSLO AS;;-5386.25;NOK;Bokført;Til: CRUCIBLE HUB OSLO AS Betalt: 13.05.25
-12.05.2025;12.05.2025;10.05.2025;Adrian Hopkinson Dahl;immediate;Straksbetaling;3705 37 71727;;9230 34 46720;Per André Strømhaug;340;;NOK;Bokført;Vipps
-12.05.2025;12.05.2025;10.05.2025;Michael Åbyholm (92303917057);immediate;Straksbetaling;9230 34 46720;Per André Strømhaug;9230 39 17057;Michael Åbyholm;;-274;NOK;Bokført;Til: Michael Åbyholm
-12.05.2025;12.05.2025;12.05.2025;AVARDA AB (60210514611);Betaling innland;Betaling med KID innland;9230 34 46720;Brukskonto;6021 05 14611;AVARDA AB;;-4170.24;NOK;Bokført;Til: AVARDA AB Betalt: 12.05.25
-12.05.2025;12.05.2025;12.05.2025;Lynrask Vask (36062227219);Betaling innland;Betaling med melding innland;9230 34 46720;Brukskonto;3606 22 27219;Lynrask Vask;;-1343.75;NOK;Bokført;Til: 3606.22.27219 Betalt: 12.05.25
-12.05.2025;12.05.2025;12.05.2025;Watercircles Norge AS (83971074666);Betaling innland - eFaktura;Betaling med KID innland;9230 34 46720;Brukskonto;8397 10 74666;Watercircles Norge AS;;-6707;NOK;Bokført;Til: Watercircles Norge AS Betalt: 12.05.25
-12.05.2025;12.05.2025;12.05.2025;WISE EUROPE SA;Betaling utland;Betaling internasjonal;9235 00 06297;WISE EUROPE SA;9230 34 46720;Per André Strømhaug;20605.3;;NOK;Bokført;PER ANDRE STRMHAUGOBO PER ANDRE STR     OMHAUG/ROC/1330557593
-09.05.2025;09.05.2025;09.05.2025;Telia mobil. TE (60050672525);Betaling innland - Avtalegiro;Betaling med KID innland;9230 34 46720;Brukskonto;6005 06 72525;Telia mobil. TE;;-401;NOK;Bokført;TELIA NORGE AS,TELIA
-08.05.2025;08.05.2025;08.05.2025;Vipps*Ryde Technology AS;Varekjøp;Varekjøp debetkort;9230 34 46720;Per André Strømhaug;;;;-54.3;NOK;Bokført;*3983 07.05 NOK 54.30 Vipps*Ryde Technology AS Kurs: 1.0000
-07.05.2025;07.05.2025;07.05.2025;Vipps*Ryde Technology AS;Varekjøp;Varekjøp debetkort;9230 34 46720;Per André Strømhaug;;;;-23.4;NOK;Bokført;*3983 06.05 NOK 23.40 Vipps*Ryde Technology AS Kurs: 1.0000
-05.05.2025;05.05.2025;05.05.2025;IBOOKING NETTBETALING;Varekjøp;Varekjøp debetkort;9230 34 46720;Per André Strømhaug;;;;-1225;NOK;Bokført;*3983 03.05 NOK 1225.00 IBOOKING NETTBETALING Kurs: 1.0000
-05.05.2025;05.05.2025;05.05.2025;Einar Holmsen-Opdahl (13102855625);immediate;Straksbetaling;9230 34 46720;Per André Strømhaug;1310 28 55625;Einar Holmsen-Opdahl;;-90;NOK;Bokført;Til: Einar Holmsen-Opdahl
-05.05.2025;05.05.2025;05.05.2025;Birkelunden Mannskor;Betaling innland;Overføring fra annen konto;3705 27 01415;Birkelunden Mannskor;9230 34 46720;Per André Strømhaug;2009;;NOK;Bokført;Refusjon BMK, pizza ekstraøving
-05.05.2025;05.05.2025;05.05.2025;Vipps*Ryde Technology AS;Varekjøp;Varekjøp debetkort;9230 34 46720;Per André Strømhaug;;;;-28.4;NOK;Bokført;*3983 02.05 NOK 28.40 Vipps*Ryde Technology AS Kurs: 1.0000
-02.05.2025;02.05.2025;01.05.2025;Alexander Lie Petersen;immediate;Straksbetaling;0539 71 14823;;9230 34 46720;Per André Strømhaug;183;;NOK;Bokført;Fra: Alexander Lie Petersen Betalt: 01.05.25
-02.05.2025;02.05.2025;01.05.2025;Overføring til Regningskonto;Overføring;Overføring til egen konto;9230 34 46720;Brukskonto;9230 34 46712;Regningskonto;;-30000;NOK;Bokført;Nettbank til: 9230.34.46712 Betalt: 01.05.25
-;;;;;;;;;;;;;;
-Total beløp inn på konto:;;48 855,51 NOK;;;;;;;;;;;;
-;;;;;;;;;;;;;;
-Totalt beløp ut av konto:;;-72 269,57 NOK;;;;;;;;;;;;
-;;;;;;;;;;;;;;
-Inngående saldo pr. 01.05.2025:;;42 546,05 NOK;;;;;;;;;;;;
-;;;;;;;;;;;;;;
-Utgående  saldo pr. 31.05.2025:;;19 131,99 NOK;;;;;;;;;;;;
+Utfï¿½rt dato;Bokfï¿½rt dato;Rentedato;Beskrivelse;Type;Undertype;Fra konto;Avsender;Til konto;Mottakernavn;Belï¿½p inn;Belï¿½p ut;Valuta;Status;Melding/KID/Fakt.nr
+31.05.2025;31.05.2025;30.05.2025;Vipps*Helt ratt;Varekjï¿½p;Varekjï¿½p debetkort;9230 34 46720;Per Andrï¿½ Strï¿½mhaug;;;;-229;NOK;Bokfï¿½rt;*3983 28.05 NOK 229.00 Vipps*Helt ratt Kurs: 1.0000
+31.05.2025;31.05.2025;30.05.2025;Vipps*Ryde Technology AS;Varekjï¿½p;Varekjï¿½p debetkort;9230 34 46720;Per Andrï¿½ Strï¿½mhaug;;;;-54.3;NOK;Bokfï¿½rt;*3983 29.05 NOK 54.30 Vipps*Ryde Technology AS Kurs: 1.0000
+31.05.2025;31.05.2025;30.05.2025;Gowrishangar Konesalingam;immediate;Straksbetaling;9100 01 35939;;9230 34 46720;Per Andrï¿½ Strï¿½mhaug;1500;;NOK;Bokfï¿½rt;Fra: Gowrishangar Konesalingam Betalt: 30.05.25
+31.05.2025;31.05.2025;30.05.2025;30.05 ILA RENS WALDEMAR TRA OSLO;Varekjï¿½p;Varekjï¿½p debetkort;9230 34 46720;Per Andrï¿½ Strï¿½mhaug;;;;-750;NOK;Bokfï¿½rt;30.05 ILA RENS WALDEMAR TRA OSLO
+28.05.2025;28.05.2025;28.05.2025;Vipps*Ryde Technology AS;Varekjï¿½p;Varekjï¿½p debetkort;9230 34 46720;Per Andrï¿½ Strï¿½mhaug;;;;-77.7;NOK;Bokfï¿½rt;*3983 27.05 NOK 77.70 Vipps*Ryde Technology AS Kurs: 1.0000
+28.05.2025;28.05.2025;28.05.2025;Vipps*Ruter;Varekjï¿½p;Varekjï¿½p debetkort;9230 34 46720;Per Andrï¿½ Strï¿½mhaug;;;;-88;NOK;Bokfï¿½rt;*3983 27.05 NOK 88.00 Vipps*Ruter Kurs: 1.0000
+28.05.2025;28.05.2025;28.05.2025;Vipps*Ruter;Varekjï¿½p;Varekjï¿½p debetkort;9230 34 46720;Per Andrï¿½ Strï¿½mhaug;;;;-44;NOK;Bokfï¿½rt;*3983 27.05 NOK 44.00 Vipps*Ruter Kurs: 1.0000
+26.05.2025;26.05.2025;26.05.2025;Birkelunden Mannskor (37052701415);Betaling innland;Betaling med KID innland;9230 34 46720;Brukskonto;3705 27 01415;Birkelunden Mannskor;;-900;NOK;Bokfï¿½rt;Til: Birkelunden Mannskor Betalt: 25.05.25
+26.05.2025;26.05.2025;25.05.2025;Ryan Omar Alkochari (12040400808);immediate;Straksbetaling;9230 34 46720;Per Andrï¿½ Strï¿½mhaug;1204 04 00808;Ryan Omar Alkochari;;-1800;NOK;Bokfï¿½rt;Til: Ryan Omar Alkochari
+26.05.2025;26.05.2025;26.05.2025;Birkelunden Mannskor (37052701415);Betaling innland;Betaling med KID innland;9230 34 46720;Brukskonto;3705 27 01415;Birkelunden Mannskor;;-1300;NOK;Bokfï¿½rt;Til: Birkelunden Mannskor Betalt: 25.05.25
+26.05.2025;26.05.2025;26.05.2025;Vipps*Oslo Badstuforening;Varekjï¿½p;Varekjï¿½p debetkort;9230 34 46720;Per Andrï¿½ Strï¿½mhaug;;;;-150;NOK;Bokfï¿½rt;*3983 25.05 NOK 150.00 Vipps*Oslo Badstuforening Kurs: 1.0000
+26.05.2025;26.05.2025;26.05.2025;Lynrask Vask (36062227219);Betaling innland;Betaling med melding innland;9230 34 46720;Brukskonto;3606 22 27219;Lynrask Vask;;-1156;NOK;Bokfï¿½rt;Til: 3606.22.27219 Betalt: 25.05.25
+22.05.2025;22.05.2025;22.05.2025;Vipps*Ryde Technology AS;Varekjï¿½p;Varekjï¿½p debetkort;9230 34 46720;Per Andrï¿½ Strï¿½mhaug;;;;-46.8;NOK;Bokfï¿½rt;*3983 21.05 NOK 46.80 Vipps*Ryde Technology AS Kurs: 1.0000
+21.05.2025;21.05.2025;21.05.2025;WISE EUROPE SA;Betaling utland;Betaling internasjonal;9235 00 06297;WISE EUROPE SA;9230 34 46720;Per Andrï¿½ Strï¿½mhaug;20330.21;;NOK;Bokfï¿½rt;PER ANDRE STRMHAUGOBO PER ANDRE STR     OMHAUG/ROC/1342019998
+21.05.2025;21.05.2025;21.05.2025;Andre Arne Boucher;immediate;Straksbetaling;1813 32 74967;;9230 34 46720;Per Andrï¿½ Strï¿½mhaug;183;;NOK;Bokfï¿½rt;Gave Magnus
+20.05.2025;20.05.2025;19.05.2025;Overfï¿½ring;Overfï¿½ring;Kreditoverfï¿½ring;;;9230 34 46720;Brukskonto;150;;NOK;Bokfï¿½rt;*3983 19.05 NOK 150.00 Vipps*Vipps*Ryan Omar Alk Kurs: 1.0000
+19.05.2025;19.05.2025;19.05.2025;Vipps*Ruter;Varekjï¿½p;Varekjï¿½p debetkort;9230 34 46720;Per Andrï¿½ Strï¿½mhaug;;;;-88;NOK;Bokfï¿½rt;*3983 18.05 NOK 88.00 Vipps*Ruter Kurs: 1.0000
+19.05.2025;19.05.2025;19.05.2025;Vipps*Ryde Technology AS;Varekjï¿½p;Varekjï¿½p debetkort;9230 34 46720;Per Andrï¿½ Strï¿½mhaug;;;;-25.9;NOK;Bokfï¿½rt;*3983 18.05 NOK 25.90 Vipps*Ryde Technology AS Kurs: 1.0000
+19.05.2025;19.05.2025;19.05.2025;Vipps*Ambulerande;Varekjï¿½p;Varekjï¿½p debetkort;9230 34 46720;Per Andrï¿½ Strï¿½mhaug;;;;-400;NOK;Bokfï¿½rt;*3983 18.05 NOK 400.00 Vipps*Ambulerande Kurs: 1.0000
+19.05.2025;19.05.2025;19.05.2025;Custom Catering AS;Varekjï¿½p;Varekjï¿½p debetkort;9230 34 46720;Per Andrï¿½ Strï¿½mhaug;;;;-298;NOK;Bokfï¿½rt;*3983 17.05 NOK 298.00 Custom Catering AS Kurs: 1.0000
+19.05.2025;19.05.2025;19.05.2025;Fjordkraft AS (15031934610);Betaling innland - Avtalegiro;Betaling med KID innland;9230 34 46720;Brukskonto;1503 19 34610;Fjordkraft AS;;-1085.78;NOK;Bokfï¿½rt;Fjordkraft AS
+15.05.2025;15.05.2025;15.05.2025;BORETTSLAGET ï¿½VREFOSS 7 (98204025142);Betaling innland - eFaktura;Betaling med KID innland;9230 34 46720;Brukskonto;9820 40 25142;BORETTSLAGET ï¿½VREFOSS 7;;-7688;NOK;Bokfï¿½rt;Til: BORETTSLAGET ï¿½VREFOSS 7 Betalt: 15.05.25
+14.05.2025;14.05.2025;14.05.2025;Vipps*Avisa Oslo;Varekjï¿½p;Varekjï¿½p debetkort;9230 34 46720;Per Andrï¿½ Strï¿½mhaug;;;;-299;NOK;Bokfï¿½rt;*3983 13.05 NOK 299.00 Vipps*Avisa Oslo Kurs: 1.0000
+13.05.2025;13.05.2025;13.05.2025;Vipps*Aftenposten;Varekjï¿½p;Varekjï¿½p debetkort;9230 34 46720;Per Andrï¿½ Strï¿½mhaug;;;;-149.5;NOK;Bokfï¿½rt;*3983 12.05 NOK 149.50 Vipps*Aftenposten Kurs: 1.0000
+13.05.2025;13.05.2025;13.05.2025;Per Eivind G. Strï¿½mhaug;Betaling innland;Overfï¿½ring fra annen konto;5130 11 18221;Per Eivind G. Strï¿½mhaug;9230 34 46720;Per Andrï¿½ Strï¿½mhaug;3555;;NOK;Bokfï¿½rt;Husleie mars - desember
+13.05.2025;13.05.2025;13.05.2025;13.05 ILA RENS WALDEMAR TRA OSLO;Varekjï¿½p;Varekjï¿½p debetkort;9230 34 46720;Per Andrï¿½ Strï¿½mhaug;;;;-550;NOK;Bokfï¿½rt;13.05 ILA RENS WALDEMAR TRA OSLO
+13.05.2025;13.05.2025;13.05.2025;CRUCIBLE HUB OSLO AS (15036655302);Betaling innland;Betaling med KID innland;9230 34 46720;Brukskonto;1503 66 55302;CRUCIBLE HUB OSLO AS;;-5386.25;NOK;Bokfï¿½rt;Til: CRUCIBLE HUB OSLO AS Betalt: 13.05.25
+13.05.2025;13.05.2025;13.05.2025;CRUCIBLE HUB OSLO AS (15036655302);Betaling innland;Betaling med KID innland;9230 34 46720;Brukskonto;1503 66 55302;CRUCIBLE HUB OSLO AS;;-5386.25;NOK;Bokfï¿½rt;Til: CRUCIBLE HUB OSLO AS Betalt: 13.05.25
+12.05.2025;12.05.2025;10.05.2025;Adrian Hopkinson Dahl;immediate;Straksbetaling;3705 37 71727;;9230 34 46720;Per Andrï¿½ Strï¿½mhaug;340;;NOK;Bokfï¿½rt;Vipps
+12.05.2025;12.05.2025;10.05.2025;Michael ï¿½byholm (92303917057);immediate;Straksbetaling;9230 34 46720;Per Andrï¿½ Strï¿½mhaug;9230 39 17057;Michael ï¿½byholm;;-274;NOK;Bokfï¿½rt;Til: Michael ï¿½byholm
+12.05.2025;12.05.2025;12.05.2025;AVARDA AB (60210514611);Betaling innland;Betaling med KID innland;9230 34 46720;Brukskonto;6021 05 14611;AVARDA AB;;-4170.24;NOK;Bokfï¿½rt;Til: AVARDA AB Betalt: 12.05.25
+12.05.2025;12.05.2025;12.05.2025;Lynrask Vask (36062227219);Betaling innland;Betaling med melding innland;9230 34 46720;Brukskonto;3606 22 27219;Lynrask Vask;;-1343.75;NOK;Bokfï¿½rt;Til: 3606.22.27219 Betalt: 12.05.25
+12.05.2025;12.05.2025;12.05.2025;Watercircles Norge AS (83971074666);Betaling innland - eFaktura;Betaling med KID innland;9230 34 46720;Brukskonto;8397 10 74666;Watercircles Norge AS;;-6707;NOK;Bokfï¿½rt;Til: Watercircles Norge AS Betalt: 12.05.25
+12.05.2025;12.05.2025;12.05.2025;WISE EUROPE SA;Betaling utland;Betaling internasjonal;9235 00 06297;WISE EUROPE SA;9230 34 46720;Per Andrï¿½ Strï¿½mhaug;20605.3;;NOK;Bokfï¿½rt;PER ANDRE STRMHAUGOBO PER ANDRE STR     OMHAUG/ROC/1330557593
+09.05.2025;09.05.2025;09.05.2025;Telia mobil. TE (60050672525);Betaling innland - Avtalegiro;Betaling med KID innland;9230 34 46720;Brukskonto;6005 06 72525;Telia mobil. TE;;-401;NOK;Bokfï¿½rt;TELIA NORGE AS,TELIA
+08.05.2025;08.05.2025;08.05.2025;Vipps*Ryde Technology AS;Varekjï¿½p;Varekjï¿½p debetkort;9230 34 46720;Per Andrï¿½ Strï¿½mhaug;;;;-54.3;NOK;Bokfï¿½rt;*3983 07.05 NOK 54.30 Vipps*Ryde Technology AS Kurs: 1.0000
+07.05.2025;07.05.2025;07.05.2025;Vipps*Ryde Technology AS;Varekjï¿½p;Varekjï¿½p debetkort;9230 34 46720;Per Andrï¿½ Strï¿½mhaug;;;;-23.4;NOK;Bokfï¿½rt;*3983 06.05 NOK 23.40 Vipps*Ryde Technology AS Kurs: 1.0000
+05.05.2025;05.05.2025;05.05.2025;IBOOKING NETTBETALING;Varekjï¿½p;Varekjï¿½p debetkort;9230 34 46720;Per Andrï¿½ Strï¿½mhaug;;;;-1225;NOK;Bokfï¿½rt;*3983 03.05 NOK 1225.00 IBOOKING NETTBETALING Kurs: 1.0000
+05.05.2025;05.05.2025;05.05.2025;Einar Holmsen-Opdahl (13102855625);immediate;Straksbetaling;9230 34 46720;Per Andrï¿½ Strï¿½mhaug;1310 28 55625;Einar Holmsen-Opdahl;;-90;NOK;Bokfï¿½rt;Til: Einar Holmsen-Opdahl
+05.05.2025;05.05.2025;05.05.2025;Birkelunden Mannskor;Betaling innland;Overfï¿½ring fra annen konto;3705 27 01415;Birkelunden Mannskor;9230 34 46720;Per Andrï¿½ Strï¿½mhaug;2009;;NOK;Bokfï¿½rt;Refusjon BMK, pizza ekstraï¿½ving
+05.05.2025;05.05.2025;05.05.2025;Vipps*Ryde Technology AS;Varekjï¿½p;Varekjï¿½p debetkort;9230 34 46720;Per Andrï¿½ Strï¿½mhaug;;;;-28.4;NOK;Bokfï¿½rt;*3983 02.05 NOK 28.40 Vipps*Ryde Technology AS Kurs: 1.0000
+02.05.2025;02.05.2025;01.05.2025;Alexander Lie Petersen;immediate;Straksbetaling;0539 71 14823;;9230 34 46720;Per Andrï¿½ Strï¿½mhaug;183;;NOK;Bokfï¿½rt;Fra: Alexander Lie Petersen Betalt: 01.05.25
+02.05.2025;02.05.2025;01.05.2025;Overfï¿½ring til Regningskonto;Overfï¿½ring;Overfï¿½ring til egen konto;9230 34 46720;Brukskonto;9230 34 46712;Regningskonto;;-30000;NOK;Bokfï¿½rt;Nettbank til: 9230.34.46712 Betalt: 01.05.25

@@ -3,6 +3,7 @@ import { HotTable } from '@handsontable/react';
 import { registerAllModules } from 'handsontable/registry';
 import 'handsontable/dist/handsontable.full.min.css';
 import { CategorySummary, TargetSummary } from '../types/common';
+import type Handsontable from 'handsontable';
 
 // Register Handsontable modules
 registerAllModules();
@@ -10,9 +11,10 @@ registerAllModules();
 interface SummaryTableProps {
   data: CategorySummary[] | TargetSummary[];
   type: 'category' | 'target';
+  bank?: 'wise' | 'bn_bank';
 }
 
-const SummaryTable: FC<SummaryTableProps> = ({ data, type }) => {
+const SummaryTable: FC<SummaryTableProps> = ({ data, type, bank = 'wise' }) => {
   if (data.length === 0) {
     return (
       <div className="text-center py-8 text-gray-500">
@@ -21,20 +23,42 @@ const SummaryTable: FC<SummaryTableProps> = ({ data, type }) => {
     );
   }
 
+  const currency = bank === 'bn_bank' ? 'NOK' : '$';
+
+  const renderAmount = (
+    _instance: Handsontable.Core,
+    td: HTMLTableCellElement,
+    _row: number,
+    _col: number,
+    _prop: string | number,
+    value: number
+  ): void => {
+    const displayValue = bank === 'bn_bank' ? Math.abs(value) : value;
+    td.textContent =
+      displayValue != null
+        ? displayValue.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })
+        : '';
+  };
+
   const categoryColumns = [
     { data: 'category', title: 'Category' },
     {
       data: 'totalAmount',
-      title: 'Total $',
+      title: `Total ${currency}`,
       type: 'numeric',
-      numericFormat: { pattern: '$0,0.00' },
+      numericFormat: { pattern: bank === 'bn_bank' ? '0,0.00' : '$0,0.00' },
+      renderer: renderAmount,
     },
     { data: 'count', title: 'Count', type: 'numeric' },
     {
       data: 'averageAmount',
-      title: 'Average $',
+      title: `Average ${currency}`,
       type: 'numeric',
-      numericFormat: { pattern: '$0,0.00' },
+      numericFormat: { pattern: bank === 'bn_bank' ? '0,0.00' : '$0,0.00' },
+      renderer: renderAmount,
     },
   ];
 
@@ -42,16 +66,18 @@ const SummaryTable: FC<SummaryTableProps> = ({ data, type }) => {
     { data: 'targetName', title: 'Target Name' },
     {
       data: 'totalAmount',
-      title: 'Total $',
+      title: `Total ${currency}`,
       type: 'numeric',
-      numericFormat: { pattern: '$0,0.00' },
+      numericFormat: { pattern: bank === 'bn_bank' ? '0,0.00' : '$0,0.00' },
+      renderer: renderAmount,
     },
     { data: 'count', title: 'Count', type: 'numeric' },
     {
       data: 'averageAmount',
-      title: 'Average $',
+      title: `Average ${currency}`,
       type: 'numeric',
-      numericFormat: { pattern: '$0,0.00' },
+      numericFormat: { pattern: bank === 'bn_bank' ? '0,0.00' : '$0,0.00' },
+      renderer: renderAmount,
     },
   ];
 

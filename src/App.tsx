@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import type { JSX } from 'react';
 import {
   Card,
@@ -20,7 +20,7 @@ import {
   generateWiseTargetSummaries,
   sortWiseByAmount,
 } from './utils/csvUtils';
-import { availableDataFiles, type DataFile } from './utils/dataLoader/common';
+import { getAvailableMonths, getDataFile } from './utils/dataLoader/common';
 import { loadWiseDataFile } from './utils/dataLoader/wise';
 import { loadBnBankDataFile } from './utils/dataLoader/bnBank';
 import { BnTransaction, BnCleanTransaction } from './types/bnBank';
@@ -43,58 +43,82 @@ function App(): JSX.Element {
   const [totalReceived, setTotalReceived] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedDataFile, setSelectedDataFile] = useState<DataFile | null>(
-    null
-  );
   const [selectedBank, setSelectedBank] = useState<'wise' | 'bn_bank'>('wise');
+  const [selectedMonth, setSelectedMonth] = useState<{
+    year: number;
+    month: number;
+  } | null>(null);
 
-  const loadData = useCallback(
-    async (dataFile?: DataFile) => {
-      const fileToLoad =
-        dataFile ??
-        selectedDataFile ??
-        availableDataFiles.filter(f => f.bank === selectedBank)[0];
-      if (!fileToLoad) {
-        setError('No data files available');
-        return;
-      }
-      setLoading(true);
-      setError(null);
-      let transactions;
-      if (selectedBank === 'wise') {
-        transactions = await loadWiseDataFile(
-          fileToLoad as import('./utils/dataLoader/wise').DataFile
-        );
-        processTransactions(transactions);
-      } else if (selectedBank === 'bn_bank') {
-        const transactions = await loadBnBankDataFile(
-          fileToLoad as import('./utils/dataLoader/bnBank').BnDataFile
-        );
-        processBnBankTransactions(transactions);
-      }
-      if (!selectedDataFile) {
-        setSelectedDataFile(fileToLoad);
-      }
-    },
-    [selectedDataFile, selectedBank]
-  );
+  // Get all available months (sorted)
+  const availableMonths = getAvailableMonths();
 
-  useEffect((): void => {
-    loadData();
-  }, [loadData]);
+  // Set default selected month on mount or when availableMonths changes
+  useEffect(() => {
+    if (!selectedMonth && availableMonths.length > 0) {
+      const firstMonth = availableMonths[0];
+      if (firstMonth) setSelectedMonth(firstMonth);
+    }
+  }, [selectedMonth, availableMonths]);
+
+  // Load data when bank or month changes
+  useEffect(() => {
+    if (!selectedMonth) return;
+    const { year, month } = selectedMonth;
+    const dataFile = getDataFile(year, month, selectedBank);
+    if (!dataFile) {
+      setCleanedTransactions([]);
+      setCategorySummaries([]);
+      setTargetSummaries([]);
+      setTotalSpent(0);
+      setTotalReceived(0);
+      setError('No data');
+      setLoading(false);
+      return;
+    }
+    setLoading(true);
+    setError(null);
+    (async (): Promise<void> => {
+      try {
+        if (selectedBank === 'wise') {
+          const transactions = await loadWiseDataFile(
+            dataFile as import('./utils/dataLoader/wise').DataFile
+          );
+          processTransactions(transactions);
+        } else if (selectedBank === 'bn_bank') {
+          const transactions = await loadBnBankDataFile(
+            dataFile as import('./utils/dataLoader/bnBank').BnDataFile
+          );
+          processBnBankTransactions(transactions);
+        }
+        setError(null);
+      } catch (e) {
+        setError('No data');
+        setCleanedTransactions([]);
+        setCategorySummaries([]);
+        setTargetSummaries([]);
+        setTotalSpent(0);
+        setTotalReceived(0);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [selectedBank, selectedMonth]);
 
   const handleMonthChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ): void => {
-    const selectedPath = event.target.value;
-    const dataFile = availableDataFiles.find(
-      (file: DataFile) =>
-        file.path === selectedPath && file.bank === selectedBank
-    );
-    if (dataFile) {
-      setSelectedDataFile(dataFile);
-      loadData(dataFile);
+    const [yearStr, monthStr] = event.target.value.split('-');
+    const year = Number(yearStr);
+    const month = Number(monthStr);
+    if (!isNaN(year) && !isNaN(month)) {
+      setSelectedMonth({ year, month });
     }
+  };
+
+  const handleBankChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ): void => {
+    setSelectedBank(event.target.value as 'wise' | 'bn_bank');
   };
 
   const processTransactions = (transactions: WiseTransaction[]): void => {
@@ -134,13 +158,7 @@ function App(): JSX.Element {
               <Select
                 id="bank-select"
                 value={selectedBank}
-                onChange={(e): void => {
-                  const newBank = e.target.value as 'wise' | 'bn_bank';
-                  setSelectedBank(newBank);
-                  const firstFile =
-                    availableDataFiles.find(f => f.bank === newBank) ?? null;
-                  setSelectedDataFile(firstFile);
-                }}
+                onChange={handleBankChange}
                 className="w-48"
               >
                 <option value="wise">Wise</option>
@@ -149,47 +167,46 @@ function App(): JSX.Element {
             </div>
           </div>
 
-          {/* Month selector (only show if wise is selected) */}
-          {selectedBank === 'wise' && (
-            <div className="mb-6">
-              <div className="flex items-center gap-4 mb-4">
-                <label
-                  htmlFor="month-select"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Select Month:
-                </label>
-                <Select
-                  id="month-select"
-                  value={selectedDataFile?.path ?? ''}
-                  onChange={handleMonthChange}
-                  className="w-48"
-                  disabled={loading}
-                >
-                  {availableDataFiles
-                    .filter(f => f.bank === selectedBank)
-                    .map((file: DataFile) => (
-                      <option key={file.path} value={file.path}>
-                        {file.displayName}
-                      </option>
-                    ))}
-                </Select>
-              </div>
-              {selectedDataFile && (
-                <div className="text-sm text-gray-600">
-                  Viewing data: {selectedDataFile.displayName}
-                </div>
-              )}
-              {loading && (
-                <div className="text-sm text-blue-600 mt-1">
-                  Loading transaction data...
-                </div>
-              )}
-              {error && (
-                <div className="text-sm text-red-600 mt-1">{error}</div>
-              )}
+          {/* Month selector (for both banks) */}
+          <div className="mb-6">
+            <div className="flex items-center gap-4 mb-4">
+              <label
+                htmlFor="month-select"
+                className="text-sm font-medium text-gray-700"
+              >
+                Select Month:
+              </label>
+              <Select
+                id="month-select"
+                value={
+                  selectedMonth
+                    ? `${selectedMonth.year}-${selectedMonth.month}`
+                    : ''
+                }
+                onChange={handleMonthChange}
+                className="w-48"
+                disabled={loading}
+              >
+                {availableMonths.map(({ year, month }) => (
+                  <option key={`${year}-${month}`} value={`${year}-${month}`}>
+                    {`${year} - ${month.toString().padStart(2, '0')}`}
+                  </option>
+                ))}
+              </Select>
             </div>
-          )}
+            {selectedMonth && (
+              <div className="text-sm text-gray-600">
+                Viewing data: {selectedMonth.year} -{' '}
+                {selectedMonth.month.toString().padStart(2, '0')}
+              </div>
+            )}
+            {loading && (
+              <div className="text-sm text-blue-600 mt-1">
+                Loading transaction data...
+              </div>
+            )}
+            {error && <div className="text-sm text-red-600 mt-1">{error}</div>}
+          </div>
 
           {/* BN Bank Table (use TransactionTable) */}
           {selectedBank === 'bn_bank' && cleanedTransactions.length > 0 && (
@@ -260,10 +277,12 @@ function App(): JSX.Element {
               <SummaryTable
                 data={sortWiseByAmount(categorySummaries)}
                 type="category"
+                bank="wise"
               />
               <SummaryTable
                 data={sortWiseByAmount(targetSummaries)}
                 type="target"
+                bank="wise"
               />
             </div>
           )}
@@ -274,10 +293,12 @@ function App(): JSX.Element {
               <SummaryTable
                 data={sortBnBankByAmount(categorySummaries)}
                 type="category"
+                bank="bn_bank"
               />
               <SummaryTable
                 data={sortBnBankByAmount(targetSummaries)}
                 type="target"
+                bank="bn_bank"
               />
             </div>
           )}
