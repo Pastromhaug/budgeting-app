@@ -1,0 +1,4 @@
+After making changes run type checking and linting and fix any errors. 
+These must be run in the `budgeting-app` directory.
+- Run `npm run type-check`
+- Run `npm run lint`

@@ -3,16 +3,23 @@ import { HotTable } from '@handsontable/react';
 import { registerAllModules } from 'handsontable/registry';
 import 'handsontable/dist/handsontable.full.min.css';
 import { WiseTransaction, WiseCleanTransaction } from '../types/wise';
+import { BnCleanTransaction } from '../types/bnBank';
+import type { ColumnSettings } from 'handsontable/settings';
 
 // Register Handsontable modules
 registerAllModules();
 
 interface TransactionTableProps {
-  data: WiseTransaction[] | WiseCleanTransaction[];
+  data: WiseTransaction[] | WiseCleanTransaction[] | BnCleanTransaction[];
   type: 'raw' | 'cleaned';
+  bank?: 'wise' | 'bn_bank';
 }
 
-const TransactionTable: FC<TransactionTableProps> = ({ data, type }) => {
+const TransactionTable: FC<TransactionTableProps> = ({
+  data,
+  type,
+  bank = 'wise',
+}) => {
   if (data.length === 0) {
     return (
       <div className="text-center py-8 text-gray-500">
@@ -41,7 +48,7 @@ const TransactionTable: FC<TransactionTableProps> = ({ data, type }) => {
     { data: 'Note', title: 'Note' },
   ];
 
-  const cleanedColumns = [
+  const wiseCleanedColumns = [
     { data: 'targetName', title: 'Target Name' },
     {
       data: 'sourceAmount',
@@ -54,7 +61,29 @@ const TransactionTable: FC<TransactionTableProps> = ({ data, type }) => {
     { data: 'createdOn', title: 'Date' },
   ];
 
-  const columns = type === 'raw' ? rawColumns : cleanedColumns;
+  const bnBankCleanedColumns = [
+    { data: 'targetName', title: 'Target Name' },
+    {
+      data: 'amount',
+      title: 'Amount (NOK)',
+      type: 'numeric',
+      numericFormat: { pattern: '0,0.00' },
+    },
+    { data: 'category', title: 'Category' },
+    { data: 'direction', title: 'Direction' },
+    { data: 'date', title: 'Date' },
+  ];
+
+  let columns: ColumnSettings[];
+  if (type === 'raw') {
+    columns = rawColumns;
+  } else if (type === 'cleaned' && bank === 'wise') {
+    columns = wiseCleanedColumns;
+  } else if (type === 'cleaned' && bank === 'bn_bank') {
+    columns = bnBankCleanedColumns;
+  } else {
+    columns = [];
+  }
 
   return (
     <div className="w-full overflow-x-auto">

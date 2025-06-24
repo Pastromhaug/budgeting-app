@@ -184,41 +184,22 @@ function App(): JSX.Element {
             </div>
           )}
 
-          {/* Placeholder for BN Bank */}
+          {/* BN Bank Table (use TransactionTable) */}
           {selectedBank === 'bn_bank' && cleanedTransactions.length > 0 && (
             <div className="mb-6">
               <Card>
                 <CardHeader>
                   <CardTitle>BN Bank Transactions</CardTitle>
                   <CardDescription>
-                    Minimal table for BN Bank (full stats coming soon)
+                    All BN Bank transactions (interactive table)
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <table className="min-w-full text-xs">
-                    <thead>
-                      <tr>
-                        <th className="px-2 py-1">Date</th>
-                        <th className="px-2 py-1">Target</th>
-                        <th className="px-2 py-1">Category</th>
-                        <th className="px-2 py-1">Direction</th>
-                        <th className="px-2 py-1">Amount</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {(cleanedTransactions as BnCleanTransaction[]).map(
-                        (t, i) => (
-                          <tr key={i}>
-                            <td className="px-2 py-1">{t.date}</td>
-                            <td className="px-2 py-1">{t.targetName}</td>
-                            <td className="px-2 py-1">{t.category}</td>
-                            <td className="px-2 py-1">{t.direction}</td>
-                            <td className="px-2 py-1">{t.amount}</td>
-                          </tr>
-                        )
-                      )}
-                    </tbody>
-                  </table>
+                  <TransactionTable
+                    data={cleanedTransactions as BnCleanTransaction[]}
+                    type="cleaned"
+                    bank="bn_bank"
+                  />
                 </CardContent>
               </Card>
             </div>
