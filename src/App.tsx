@@ -1,12 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { JSX } from 'react';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from './components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from './components/ui/card';
 import { Select } from './components/ui/select';
 import TransactionTable from './components/TransactionTable';
 import SummaryTable from './components/SummaryTable';
@@ -210,27 +204,6 @@ function App(): JSX.Element {
             {error && <div className="text-sm text-red-600 mt-1">{error}</div>}
           </div>
 
-          {/* BN Bank Table (use TransactionTable) */}
-          {selectedBank === 'bn_bank' && cleanedTransactions.length > 0 && (
-            <div className="mb-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>BN Bank Transactions</CardTitle>
-                  <CardDescription>
-                    All BN Bank transactions (interactive table)
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <TransactionTable
-                    data={cleanedTransactions as BnCleanTransaction[]}
-                    type="cleaned"
-                    bank="bn_bank"
-                  />
-                </CardContent>
-              </Card>
-            </div>
-          )}
-
           {/* Summary Cards (only for wise) */}
           {selectedBank === 'wise' && cleanedTransactions.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -363,11 +336,16 @@ function App(): JSX.Element {
             </div>
           )}
 
-          {/* Transaction Table */}
-          {selectedBank === 'wise' && cleanedTransactions.length > 0 && (
+          {/* Transaction Table (for both banks) */}
+          {cleanedTransactions.length > 0 && (
             <TransactionTable
-              data={cleanedTransactions as WiseCleanTransaction[]}
+              data={
+                selectedBank === 'wise'
+                  ? (cleanedTransactions as WiseCleanTransaction[])
+                  : (cleanedTransactions as BnCleanTransaction[])
+              }
               type="cleaned"
+              bank={selectedBank}
             />
           )}
         </header>
