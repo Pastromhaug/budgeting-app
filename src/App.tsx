@@ -24,7 +24,12 @@ import { availableDataFiles, type DataFile } from './utils/dataLoader/common';
 import { loadWiseDataFile } from './utils/dataLoader/wise';
 import { loadBnBankDataFile } from './utils/dataLoader/bnBank';
 import { BnTransaction, BnCleanTransaction } from './types/bnBank';
-import { cleanBnBankTransactions } from './utils/csv/bnBank';
+import {
+  cleanBnBankTransactions,
+  generateBnBankCategorySummaries,
+  generateBnBankTargetSummaries,
+  sortBnBankByAmount,
+} from './utils/csv/bnBank';
 
 function App(): JSX.Element {
   const [cleanedTransactions, setCleanedTransactions] = useState<
@@ -104,6 +109,8 @@ function App(): JSX.Element {
   const processBnBankTransactions = (transactions: BnTransaction[]): void => {
     const cleaned = cleanBnBankTransactions(transactions);
     setCleanedTransactions(cleaned);
+    setCategorySummaries(generateBnBankCategorySummaries(cleaned));
+    setTargetSummaries(generateBnBankTargetSummaries(cleaned));
     // TODO: Add BN Bank statistics here
   };
 
@@ -256,6 +263,20 @@ function App(): JSX.Element {
               />
               <SummaryTable
                 data={sortWiseByAmount(targetSummaries)}
+                type="target"
+              />
+            </div>
+          )}
+
+          {/* Category and Target Summaries (only for BN Bank) */}
+          {selectedBank === 'bn_bank' && cleanedTransactions.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+              <SummaryTable
+                data={sortBnBankByAmount(categorySummaries)}
+                type="category"
+              />
+              <SummaryTable
+                data={sortBnBankByAmount(targetSummaries)}
                 type="target"
               />
             </div>
