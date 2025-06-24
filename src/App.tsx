@@ -29,6 +29,8 @@ import {
   generateBnBankCategorySummaries,
   generateBnBankTargetSummaries,
   sortBnBankByAmount,
+  calculateBnBankTotalSpent,
+  calculateBnBankTotalReceived,
 } from './utils/csv/bnBank';
 
 function App(): JSX.Element {
@@ -253,6 +255,64 @@ function App(): JSX.Element {
                 <CardContent>
                   <div className="text-2xl font-bold">
                     ${totalReceived.toFixed(2)}
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-gray-700">
+                    Transactions
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">
+                    {cleanedTransactions.length}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {/* Summary Cards (only for BN Bank) */}
+          {selectedBank === 'bn_bank' && cleanedTransactions.length > 0 && (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-red-600">
+                    Total Spent
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">
+                    {Math.abs(
+                      calculateBnBankTotalSpent(
+                        cleanedTransactions as BnCleanTransaction[]
+                      )
+                    ).toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}{' '}
+                    NOK
+                  </div>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-sm font-medium text-green-600">
+                    Total Received
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">
+                    {Math.abs(
+                      calculateBnBankTotalReceived(
+                        cleanedTransactions as BnCleanTransaction[]
+                      )
+                    ).toLocaleString(undefined, {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}{' '}
+                    NOK
                   </div>
                 </CardContent>
               </Card>
