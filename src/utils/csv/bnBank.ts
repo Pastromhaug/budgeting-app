@@ -12,31 +12,28 @@ export interface BnBankParseResult {
 }
 
 // Parse CSV data for BN Bank with zod validation
-export const parseBnBankCSV = (csvText: string): Promise<BnBankParseResult> => {
+export const parseBnBankCSV = (csvText: string): Promise<BnTransaction[]> => {
   return new Promise((resolve, reject) => {
     Papa.parse(csvText, {
       header: true,
       skipEmptyLines: true,
       delimiter: ';',
       complete: results => {
-        const transactions: ReturnType<typeof BnTransactionSchema.parse>[] = [];
-        const errors: string[] = [];
-        for (const row of results.data as BnTransaction[]) {
+        const transactions: BnTransaction[] = [];
+        for (const row of results.data as Record<string, unknown>[]) {
           const result = BnTransactionSchema.safeParse(row);
           if (result.success) {
             transactions.push(result.data);
           } else {
-            errors.push(JSON.stringify(result.error.issues));
-            // Log detailed error for debugging
-            console.error(
-              'BN Bank CSV validation error:',
-              result.error.issues,
-              'Row:',
-              row
+            throw new Error(
+              'BN Bank CSV validation error: ' +
+                JSON.stringify(result.error.issues) +
+                '\nRow: ' +
+                JSON.stringify(row)
             );
           }
         }
-        resolve({ transactions, errors });
+        resolve(transactions);
       },
       error: (error: unknown) => {
         reject(error);
@@ -50,11 +47,11 @@ export const cleanBnBankTransactions = (
   transactions: BnTransaction[]
 ): BnCleanTransaction[] => {
   return transactions.map(transaction => {
-    const date = transaction['Utfrt dato'];
-    const inn = (transaction['Belp inn'] ?? '')
+    const date = transaction['Utfrt dato'];
+    const inn = (transaction['Belp inn'] ?? '')
       .replace(/\s/g, '')
       .replace(',', '.');
-    const ut = (transaction['Belp ut'] ?? '')
+    const ut = (transaction['Belp ut'] ?? '')
       .replace(/\s/g, '')
       .replace(',', '.');
     let direction: Direction;

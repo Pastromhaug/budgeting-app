@@ -49,37 +49,26 @@ function App(): JSX.Element {
         dataFile ??
         selectedDataFile ??
         availableDataFiles.filter(f => f.bank === selectedBank)[0];
-
       if (!fileToLoad) {
         setError('No data files available');
         return;
       }
-
       setLoading(true);
       setError(null);
-      try {
-        let transactions;
-        if (selectedBank === 'wise') {
-          transactions = await loadWiseDataFile(
-            fileToLoad as import('./utils/dataLoader/wise').DataFile
-          );
-          processTransactions(transactions);
-        } else if (selectedBank === 'bn_bank') {
-          const result = await loadBnBankDataFile(
-            fileToLoad as import('./utils/dataLoader/bnBank').BnDataFile
-          );
-          processBnBankTransactions(result.transactions);
-        }
-        if (!selectedDataFile) {
-          setSelectedDataFile(fileToLoad);
-        }
-      } catch (error) {
-        console.error('Error loading data:', error);
-        setError(
-          `Failed to load transaction data for ${fileToLoad.displayName}. Please check that the CSV file exists.`
+      let transactions;
+      if (selectedBank === 'wise') {
+        transactions = await loadWiseDataFile(
+          fileToLoad as import('./utils/dataLoader/wise').DataFile
         );
-      } finally {
-        setLoading(false);
+        processTransactions(transactions);
+      } else if (selectedBank === 'bn_bank') {
+        const transactions = await loadBnBankDataFile(
+          fileToLoad as import('./utils/dataLoader/bnBank').BnDataFile
+        );
+        processBnBankTransactions(transactions);
+      }
+      if (!selectedDataFile) {
+        setSelectedDataFile(fileToLoad);
       }
     },
     [selectedDataFile, selectedBank]
@@ -138,9 +127,13 @@ function App(): JSX.Element {
               <Select
                 id="bank-select"
                 value={selectedBank}
-                onChange={e =>
-                  setSelectedBank(e.target.value as 'wise' | 'bn_bank')
-                }
+                onChange={(e): void => {
+                  const newBank = e.target.value as 'wise' | 'bn_bank';
+                  setSelectedBank(newBank);
+                  const firstFile =
+                    availableDataFiles.find(f => f.bank === newBank) ?? null;
+                  setSelectedDataFile(firstFile);
+                }}
                 className="w-48"
               >
                 <option value="wise">Wise</option>

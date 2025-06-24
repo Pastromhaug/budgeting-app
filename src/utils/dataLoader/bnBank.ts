@@ -1,4 +1,4 @@
-import { parseBnBankCSV, BnBankParseResult } from '../csv/bnBank';
+import { parseBnBankCSV } from '../csv/bnBank';
 import { BnTransaction } from '../../types/bnBank';
 
 export interface BnDataFile {
@@ -36,25 +36,26 @@ export interface BnBankDataResult {
   errors: string[];
 }
 
-export const loadBnBankDataFile = async (dataFile: BnDataFile): Promise<BnBankDataResult> => {
+export const loadBnBankDataFile = async (
+  dataFile: BnDataFile
+): Promise<BnTransaction[]> => {
   const cacheKey = dataFile.path;
   if (bnDataCache.has(cacheKey)) {
     const cachedData = bnDataCache.get(cacheKey);
     if (cachedData) {
-      return { transactions: cachedData, errors: [] };
+      return cachedData;
     }
   }
-  try {
-    const response = await fetch(`/${dataFile.path}`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch CSV file: ${response.status} ${response.statusText}`);
-    }
-    const csvText = await response.text();
-    const { transactions, errors }: BnBankParseResult = await parseBnBankCSV(csvText);
-    bnDataCache.set(cacheKey, transactions);
-    return { transactions, errors };
-  } catch (error) {
-    console.error(`Error loading CSV data from ${dataFile.path}:`, error);
-    throw new Error(`Could not load CSV data from ${dataFile.displayName}. Make sure the file exists in public/${dataFile.path}`);
+  const response = await fetch(`/${dataFile.path}`);
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch CSV file: ${response.status} ${response.statusText}`
+    );
   }
+  const csvText = await response.text();
+  // Clean CSV content: allow printable ASCII, whitespace, and Norwegian letters
+  const cleanedCsvText = csvText.replace(/[^\x20-\x7E\n\r\tæøåÆØÅ]/g, '');
+  const transactions: BnTransaction[] = await parseBnBankCSV(cleanedCsvText);
+  bnDataCache.set(cacheKey, transactions);
+  return transactions;
 };

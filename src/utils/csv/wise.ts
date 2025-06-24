@@ -19,11 +19,11 @@ export const parseWiseCSV = (csvText: string): Promise<WiseTransaction[]> => {
           if (result.success) {
             transactions.push(result.data);
           } else {
-            console.error(
-              'Wise CSV validation error:',
-              result.error.issues,
-              'Row:',
-              row
+            throw new Error(
+              'Wise CSV validation error: ' +
+                JSON.stringify(result.error.issues) +
+                '\nRow: ' +
+                JSON.stringify(row)
             );
           }
         }
