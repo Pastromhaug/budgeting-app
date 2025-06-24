@@ -26,6 +26,7 @@ import {
   calculateBnBankTotalSpent,
   calculateBnBankTotalReceived,
 } from './utils/csv/bnBank';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from './components/ui/tabs';
 
 function App(): JSX.Element {
   const [cleanedTransactions, setCleanedTransactions] = useState<
@@ -204,149 +205,161 @@ function App(): JSX.Element {
             {error && <div className="text-sm text-red-600 mt-1">{error}</div>}
           </div>
 
-          {/* Summary Cards (only for wise) */}
-          {selectedBank === 'wise' && cleanedTransactions.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-red-600">
-                    Total Spent
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">
-                    ${totalSpent.toFixed(2)}
-                  </div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-green-600">
-                    Total Received
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">
-                    ${totalReceived.toFixed(2)}
-                  </div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-700">
-                    Transactions
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">
-                    {cleanedTransactions.length}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          )}
-
-          {/* Summary Cards (only for BN Bank) */}
-          {selectedBank === 'bn_bank' && cleanedTransactions.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-red-600">
-                    Total Spent
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">
-                    {Math.abs(
-                      calculateBnBankTotalSpent(
-                        cleanedTransactions as BnCleanTransaction[]
-                      )
-                    ).toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}{' '}
-                    NOK
-                  </div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-green-600">
-                    Total Received
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">
-                    {Math.abs(
-                      calculateBnBankTotalReceived(
-                        cleanedTransactions as BnCleanTransaction[]
-                      )
-                    ).toLocaleString(undefined, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })}{' '}
-                    NOK
-                  </div>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-gray-700">
-                    Transactions
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">
-                    {cleanedTransactions.length}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          )}
-
-          {/* Category and Target Summaries (only for wise) */}
-          {selectedBank === 'wise' && cleanedTransactions.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              <SummaryTable
-                data={sortWiseByAmount(categorySummaries)}
-                type="category"
-                bank="wise"
-              />
-              <SummaryTable
-                data={sortWiseByAmount(targetSummaries)}
-                type="target"
-                bank="wise"
-              />
-            </div>
-          )}
-
-          {/* Category and Target Summaries (only for BN Bank) */}
-          {selectedBank === 'bn_bank' && cleanedTransactions.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              <SummaryTable
-                data={sortBnBankByAmount(categorySummaries)}
-                type="category"
-                bank="bn_bank"
-              />
-              <SummaryTable
-                data={sortBnBankByAmount(targetSummaries)}
-                type="target"
-                bank="bn_bank"
-              />
-            </div>
-          )}
-
-          {/* Transaction Table (for both banks) */}
+          {/* Summary Cards (for both banks) */}
           {cleanedTransactions.length > 0 && (
-            <TransactionTable
-              data={
-                selectedBank === 'wise'
-                  ? (cleanedTransactions as WiseCleanTransaction[])
-                  : (cleanedTransactions as BnCleanTransaction[])
-              }
-              type="cleaned"
-              bank={selectedBank}
-            />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              {selectedBank === 'wise' ? (
+                <>
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-medium text-red-600">
+                        Total Spent
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">
+                        ${totalSpent.toFixed(2)}
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-medium text-green-600">
+                        Total Received
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">
+                        ${totalReceived.toFixed(2)}
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-medium text-gray-700">
+                        Transactions
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">
+                        {cleanedTransactions.length}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </>
+              ) : (
+                <>
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-medium text-red-600">
+                        Total Spent
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">
+                        {Math.abs(
+                          calculateBnBankTotalSpent(
+                            cleanedTransactions as BnCleanTransaction[]
+                          )
+                        ).toLocaleString(undefined, {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}{' '}
+                        NOK
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-medium text-green-600">
+                        Total Received
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">
+                        {Math.abs(
+                          calculateBnBankTotalReceived(
+                            cleanedTransactions as BnCleanTransaction[]
+                          )
+                        ).toLocaleString(undefined, {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}{' '}
+                        NOK
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm font-medium text-gray-700">
+                        Transactions
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">
+                        {cleanedTransactions.length}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </>
+              )}
+            </div>
+          )}
+
+          {/* Tabs for Categories, Targets, Transactions */}
+          {cleanedTransactions.length > 0 && (
+            <Tabs defaultValue="categories">
+              <TabsList className="mb-4">
+                <TabsTrigger value="categories">Categories</TabsTrigger>
+                <TabsTrigger value="targets">Targets</TabsTrigger>
+                <TabsTrigger value="transactions">Transactions</TabsTrigger>
+              </TabsList>
+              <TabsContent value="categories">
+                <div className="grid grid-cols-1 md:grid-cols-1 gap-4 mb-6">
+                  {selectedBank === 'wise' ? (
+                    <SummaryTable
+                      data={sortWiseByAmount(categorySummaries)}
+                      type="category"
+                      bank="wise"
+                    />
+                  ) : (
+                    <SummaryTable
+                      data={sortBnBankByAmount(categorySummaries)}
+                      type="category"
+                      bank="bn_bank"
+                    />
+                  )}
+                </div>
+              </TabsContent>
+              <TabsContent value="targets">
+                <div className="grid grid-cols-1 md:grid-cols-1 gap-4 mb-6">
+                  {selectedBank === 'wise' ? (
+                    <SummaryTable
+                      data={sortWiseByAmount(targetSummaries)}
+                      type="target"
+                      bank="wise"
+                    />
+                  ) : (
+                    <SummaryTable
+                      data={sortBnBankByAmount(targetSummaries)}
+                      type="target"
+                      bank="bn_bank"
+                    />
+                  )}
+                </div>
+              </TabsContent>
+              <TabsContent value="transactions">
+                <TransactionTable
+                  data={
+                    selectedBank === 'wise'
+                      ? (cleanedTransactions as WiseCleanTransaction[])
+                      : (cleanedTransactions as BnCleanTransaction[])
+                  }
+                  type="cleaned"
+                  bank={selectedBank}
+                />
+              </TabsContent>
+            </Tabs>
           )}
         </header>
       </div>
