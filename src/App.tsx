@@ -32,6 +32,9 @@ function App(): JSX.Element {
   const [cleanedTransactions, setCleanedTransactions] = useState<
     WiseCleanTransaction[] | BnCleanTransaction[]
   >([]);
+  const [rawTransactions, setRawTransactions] = useState<
+    (WiseTransaction | BnTransaction)[]
+  >([]);
   const [categorySummaries, setCategorySummaries] = useState<CategorySummary[]>(
     []
   );
@@ -64,6 +67,7 @@ function App(): JSX.Element {
     const dataFile = getDataFile(year, month, selectedBank);
     if (!dataFile) {
       setCleanedTransactions([]);
+      setRawTransactions([]);
       setCategorySummaries([]);
       setTargetSummaries([]);
       setTotalSpent(0);
@@ -80,17 +84,20 @@ function App(): JSX.Element {
           const transactions = await loadWiseDataFile(
             dataFile as import('./utils/dataLoader/wise').DataFile
           );
+          setRawTransactions(transactions);
           processTransactions(transactions);
         } else if (selectedBank === 'bn_bank') {
           const transactions = await loadBnBankDataFile(
             dataFile as import('./utils/dataLoader/bnBank').BnDataFile
           );
+          setRawTransactions(transactions);
           processBnBankTransactions(transactions);
         }
         setError(null);
       } catch (e) {
         setError('No data');
         setCleanedTransactions([]);
+        setRawTransactions([]);
         setCategorySummaries([]);
         setTargetSummaries([]);
         setTotalSpent(0);
@@ -306,13 +313,14 @@ function App(): JSX.Element {
             </div>
           )}
 
-          {/* Tabs for Categories, Targets, Transactions */}
+          {/* Tabs for Categories, Targets, Transactions, Raw */}
           {cleanedTransactions.length > 0 && (
             <Tabs defaultValue="categories">
               <TabsList className="mb-4">
                 <TabsTrigger value="categories">Categories</TabsTrigger>
                 <TabsTrigger value="targets">Targets</TabsTrigger>
                 <TabsTrigger value="transactions">Transactions</TabsTrigger>
+                <TabsTrigger value="raw">Raw</TabsTrigger>
               </TabsList>
               <TabsContent value="categories">
                 <div className="grid grid-cols-1 md:grid-cols-1 gap-4 mb-6">
@@ -356,6 +364,17 @@ function App(): JSX.Element {
                       : (cleanedTransactions as BnCleanTransaction[])
                   }
                   type="cleaned"
+                  bank={selectedBank}
+                />
+              </TabsContent>
+              <TabsContent value="raw">
+                <TransactionTable
+                  data={
+                    selectedBank === 'wise'
+                      ? (rawTransactions as WiseTransaction[])
+                      : (rawTransactions as BnTransaction[])
+                  }
+                  type="raw"
                   bank={selectedBank}
                 />
               </TabsContent>

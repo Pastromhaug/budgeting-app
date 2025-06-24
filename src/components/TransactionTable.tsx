@@ -2,15 +2,27 @@ import type { FC } from 'react';
 import { HotTable } from '@handsontable/react';
 import { registerAllModules } from 'handsontable/registry';
 import 'handsontable/dist/handsontable.full.min.css';
-import { WiseTransaction, WiseCleanTransaction } from '../types/wise';
-import { BnCleanTransaction } from '../types/bnBank';
+import {
+  WiseTransaction,
+  WiseCleanTransaction,
+  WiseTransactionSchema,
+} from '../types/wise';
+import {
+  BnTransaction,
+  BnCleanTransaction,
+  BnTransactionSchema,
+} from '../types/bnBank';
 import type { ColumnSettings } from 'handsontable/settings';
 
 // Register Handsontable modules
 registerAllModules();
 
 interface TransactionTableProps {
-  data: WiseTransaction[] | WiseCleanTransaction[] | BnCleanTransaction[];
+  data:
+    | WiseTransaction[]
+    | WiseCleanTransaction[]
+    | BnTransaction[]
+    | BnCleanTransaction[];
   type: 'raw' | 'cleaned';
   bank?: 'wise' | 'bn_bank';
 }
@@ -28,25 +40,20 @@ const TransactionTable: FC<TransactionTableProps> = ({
     );
   }
 
-  const rawColumns = [
-    { data: 'ID', title: 'ID' },
-    { data: 'Status', title: 'Status' },
-    { data: 'Direction', title: 'Direction' },
-    { data: 'Created on', title: 'Created On' },
-    { data: 'Source name', title: 'Source Name' },
-    {
-      data: 'Source amount (after fees)',
-      title: 'Source Amount',
-      type: 'numeric',
-      numericFormat: { pattern: '$0,0.00' },
-    },
-    { data: 'Source currency', title: 'Source Currency' },
-    { data: 'Target name', title: 'Target Name' },
-    { data: 'Target amount (after fees)', title: 'Target Amount' },
-    { data: 'Target currency', title: 'Target Currency' },
-    { data: 'Category', title: 'Category' },
-    { data: 'Note', title: 'Note' },
-  ];
+  // Dynamically generate raw columns from schema keys for type safety
+  const wiseRawColumns: ColumnSettings[] = Object.keys(
+    WiseTransactionSchema.shape
+  ).map(key => ({
+    data: key,
+    title: key,
+  }));
+
+  const bnBankRawColumns: ColumnSettings[] = Object.keys(
+    BnTransactionSchema.shape
+  ).map(key => ({
+    data: key,
+    title: key,
+  }));
 
   const wiseCleanedColumns = [
     { data: 'targetName', title: 'Target Name' },
@@ -75,8 +82,10 @@ const TransactionTable: FC<TransactionTableProps> = ({
   ];
 
   let columns: ColumnSettings[];
-  if (type === 'raw') {
-    columns = rawColumns;
+  if (type === 'raw' && bank === 'wise') {
+    columns = wiseRawColumns;
+  } else if (type === 'raw' && bank === 'bn_bank') {
+    columns = bnBankRawColumns;
   } else if (type === 'cleaned' && bank === 'wise') {
     columns = wiseCleanedColumns;
   } else if (type === 'cleaned' && bank === 'bn_bank') {
